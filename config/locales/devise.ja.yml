@@ -1,0 +1,8 @@
+ja:
+  devise:
+    passwords:
+      new:
+        title: "パスワードをお忘れの方はこちら"
+        submit: "パスワード再設定用メールを送信"
+    labels:
+      email: "メールアドレス"
