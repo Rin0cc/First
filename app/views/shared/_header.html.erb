@@ -7,8 +7,8 @@
       <li><%= link_to "プライバシーポリシー",root_path  %></li>
       <li><%= link_to "利用規約",root_path  %></li>
       <li><%= link_to "お問い合わせ",root_path  %></li>
-      <li><%= link_to "マイページ", user_path(current_user) if user_signed_in? %></li>
-      <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete if user_signed_in? %></li>
+      <li><%= link_to "マイページ", root_path %></li>
+      <li><%= link_to "ログアウト", root_path %></li>
     </ul>
   </nav>
 </header>
