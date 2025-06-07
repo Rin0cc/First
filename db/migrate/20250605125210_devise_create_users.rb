@@ -2,7 +2,7 @@
 
 class DeviseCreateUsers < ActiveRecord::Migration[7.2]
   def change
-    create_table :users do |t|
+    git add db/migrate/20250605125210_devise_create_users.rbcreate_table :users, if_not_exists: true do |t|
       ## Database authenticatable
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
