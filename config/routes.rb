@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get "users/show"
   devise_for :users
   get "/sign_up", to: redirect("/users/sign_up")
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -14,4 +13,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "top#index"
+  # ユーザーのマイページ
+  resources :users, only: [ :show ] do
+  end
 end

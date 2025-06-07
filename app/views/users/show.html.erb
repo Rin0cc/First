@@ -1,2 +1,17 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<h1><%= @user.name %>さんのマイページ</h1>
+<ul>
+  <li>
+    <%= link_to "プロフィール編集", edit_user_registration_path %>
+  </li>
+  <li>
+    <%= link_to "パスワード変更", edit_user_password_path %>
+  </li>
+  <li>
+    <%= link_to "メールアドレス変更", edit_user_email_path %>
+  </li>
+  <li>
+    <%= link_to "アカウント削除", user_registration_path, method: :delete, data: { confirm: "本当にアカウントを削除しますか？" } %>
+  </li>
+  <li>
+    <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+</ul>
