@@ -6,3 +6,31 @@ ja:
         submit: "パスワード再設定用メールを送信"
     labels:
       email: "メールアドレス"
+
+  errors:
+    messages:
+      not_saved: "%{resource} は保存できませんでした。"
+    template:
+      header:
+        one: "%{count} 件のエラーが発生したため %{resource} は保存されませんでした。"
+        other: "%{count} 件のエラーが発生したため %{resource} は保存されませんでした。"
+      body:
+        one: "以下の1件の問題を修正してください。"
+        other: "以下の%{count}件の問題を修正してください。"
+
+  activerecord:
+    models:
+      user:
+        one: "ユーザー"
+        other: "ユーザー"
+
+  password_resets:
+    new:
+      title: "パスワードリセット申請"
+      submit: "送信"
+    edit:
+      title: "パスワードリセット"
+    create:
+      success: "パスワードリセット手順を送信しました"
+    update:
+      success: "パスワードを変更しました"

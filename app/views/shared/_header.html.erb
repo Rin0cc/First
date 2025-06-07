@@ -2,11 +2,13 @@
   <nav>
     <ul>
       <li><%= link_to "ホーム", root_path %></li>
-      <li><%= link_to "新規登録", root_path %></li>
-      <li><%= link_to "ログイン", root_path %></li>
+      <li><%= link_to "新規登録", new_user_registration_path %></li>
+      <li><%= link_to "ログイン", new_user_session_path %></li>
       <li><%= link_to "プライバシーポリシー",root_path  %></li>
       <li><%= link_to "利用規約",root_path  %></li>
       <li><%= link_to "お問い合わせ",root_path  %></li>
+      <li><%= link_to "マイページ", user_path(current_user) if user_signed_in? %></li>
+      <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete if user_signed_in? %></li>
     </ul>
   </nav>
 </header>
