@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "users/show"
   devise_for :users
   get "/sign_up", to: redirect("/users/sign_up")
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
