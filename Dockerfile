@@ -33,7 +33,7 @@ RUN apt-get update -qq && \
 # Install JavaScript dependencies
 ARG NODE_VERSION=20.19.2
 ARG YARN_VERSION=1.22.22
-ENV PATH=/usr/local/node/bin:$PATH
+ENV PATH=/usr/local/node/bin:/usr/local/bin:$PATH
 RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
     /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
     npm install -g yarn@$YARN_VERSION && \
@@ -48,7 +48,7 @@ RUN bundle install && \
 # Install node modules
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-
+RUN npm install -g esbuild
 # Copy application code
 COPY . .
 

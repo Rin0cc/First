@@ -17,10 +17,12 @@ RUN apt-get update -qq \
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs yarn vim
 
 # ディレクトリを作成してそれを作業ディレクトリ（Dockerが操作するディレクトリ）に設定
+# アプリのコードを先にコピー（package.json を含む）
 RUN mkdir /myapp
 WORKDIR /myapp
-RUN gem install bundler
-
-# Dockerfileが存在するディレクトリ内（コンテナの外。今回の場合はRailsのアプリがあるディレクトリ）
-# にあるすべてのファイルとサブディレクトリをコンテナ内の/myappにコピー
 COPY . /myapp
+
+# 必要なツールをインストール
+RUN gem install bundler
+RUN yarn install
+RUN yarn add esbuild
