@@ -10,7 +10,93 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
-*= require custom
 *= require_tree .
 *= require_self
 */
+/* 背景（薄いピンク） */
+body {
+  background-color: #ffe6e6;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* ヘッダー全体（黄色） */
+.header {
+  background-color: #ffffc2;
+  padding: 1rem;
+}
+
+/* ヘッダー内レイアウト（ロゴ左・メニュー右） */
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ロゴ */
+.logo a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* コンテンツ中央の白いボックス */
+.container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.content {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 800px;
+}
+
+/* ハンバーガーメニュー（三） */
+.menu-toggle {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* メニュー初期状態：非表示 */
+.nav-menu {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 1rem;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  z-index: 1000;
+}
+
+/* 表示状態 */
+.nav-menu.active {
+  display: block;
+}
+
+/* メニューの中身 */
+.nav-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-menu li {
+  margin: 0.5rem 0;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #333;
+}
