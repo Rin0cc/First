@@ -10,9 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_05_125210) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_08_111917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "flowers", force: :cascade do |t|
+    t.string "name"
+    t.string "bloom_image_path"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "records", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "user_flower_id", null: false
+    t.text "task_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_flower_id"], name: "index_records_on_user_flower_id"
+    t.index ["user_id"], name: "index_records_on_user_id"
+  end
+
+  create_table "user_flowers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "flower_id", null: false
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flower_id"], name: "index_user_flowers_on_flower_id"
+    t.index ["user_id"], name: "index_user_flowers_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -25,4 +52,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_05_125210) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "records", "user_flowers"
+  add_foreign_key "records", "users"
+  add_foreign_key "user_flowers", "flowers"
+  add_foreign_key "user_flowers", "users"
 end

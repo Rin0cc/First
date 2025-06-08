@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  user_flower: one
+  task_name: MyText
+
+two:
+  user: two
+  user_flower: two
+  task_name: MyText
