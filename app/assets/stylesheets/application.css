@@ -21,7 +21,7 @@ body {
   font-family: sans-serif;
 }
 
-/* ヘッダー全体（黄色） */
+/* ヘッダー全体*/
 .header {
  background-color: rgba(255, 231, 231, 0.913); /* 半透明白 */
   backdrop-filter: blur(3px); /* 背景が透けるエフェクト */
