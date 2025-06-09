@@ -115,3 +115,21 @@ body {
   color: #333;
   font-family: sans-serif
 }
+/* 後で可愛くするCSSここに追加できる */
+body {
+  font-family: sans-serif;
+  text-align: center;
+  margin-top: 50px;
+}
+
+#timer {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+button {
+  font-size: 1.2em;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+}
