@@ -1,13 +1,14 @@
 <h2>記録しよう！</h2>
 
 <div id="timer-section">
-  <div id="timer">00:00:00</div>
+<div id="timer">00:00:00</div>
 
-  <button id="start">開始</button>
-  <button id="stop">停止</button>
-  <button id="record">記録</button>
+<button id="start">開始</button>
+<button id="stop">停止</button>
+<button id="record">記録</button>
 
-  <ul id="records"></ul>
+<div id="message" class="hidden"></div> <!-- メッセージ表示 -->
+<ul id="records"></ul>
 </div>
 <%= form_with model: [@user_flower, @record], local: true do |f| %>
   <div>
