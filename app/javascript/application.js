@@ -1,18 +1,16 @@
-// Entry point for the build script in your package.json
 import "@hotwired/turbo-rails"
 import "./controllers"
 
 document.addEventListener("DOMContentLoaded", function () {
-  const toggle = document.getElementById("menu-toggle");
-  const menu = document.getElementById("nav-menu");
+const toggle = document.getElementById("menu-toggle");
+const menu = document.getElementById("nav-menu");
 
-  if (toggle && menu) {
-    toggle.addEventListener("click", function () {
-      menu.classList.toggle("active");
-    });
-  }
+if (toggle && menu) {
+toggle.addEventListener("click", function () {
+menu.classList.toggle("active");
 });
-document.addEventListener("DOMContentLoaded", function () {
+}
+
 let startTime;
 let elapsed = 0;
 let timerInterval;
@@ -25,7 +23,7 @@ const seconds = String(totalSeconds % 60).padStart(2, '0');
 document.getElementById('timer').textContent = `${hours}:${minutes}:${seconds}`;
 }
 
-document.getElementById('start').addEventListener('click', () => {
+document.getElementById('start')?.addEventListener('click', () => {
 if (!timerInterval) {
 startTime = Date.now() - elapsed;
 timerInterval = setInterval(() => {
@@ -35,12 +33,12 @@ updateTimerDisplay(elapsed);
 }
 });
 
-document.getElementById('stop').addEventListener('click', () => {
+document.getElementById('stop')?.addEventListener('click', () => {
 clearInterval(timerInterval);
 timerInterval = null;
 });
 
-document.getElementById('record').addEventListener('click', () => {
+document.getElementById('record')?.addEventListener('click', () => {
 const currentTime = document.getElementById('timer').textContent;
 
 // 記録リストに追加
@@ -48,11 +46,14 @@ const li = document.createElement('li');
 li.textContent = currentTime;
 document.getElementById('records').appendChild(li);
 
-// メッセージ表示
+// メッセージと画像を表示
 const message = document.getElementById('message');
-message.textContent = `🌱 花の種を獲得しました！（${currentTime}）`;
-message.classList.add('show');
+message.innerHTML = `
+🌱 花の種を獲得しました！（${currentTime}）<br>
+<img src="/images/Flowerseeds.png" alt="花の種" style="width: 100px; margin-top: 10px;" />
+`;
 message.classList.remove('hidden');
+message.classList.add('show');
 
 setTimeout(() => {
 message.classList.remove('show');
