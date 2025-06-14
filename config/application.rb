@@ -1,5 +1,4 @@
 require_relative "boot"
-
 require "rails/all"
 
 # Gemfileのgemを読み込む
@@ -13,10 +12,13 @@ module Myapp
     # デフォルトの言語を日本語に設定
     config.i18n.default_locale = :ja
 
+    # タイムゾーンを東京に設定（ここに移動！）
+    config.time_zone = 'Tokyo'
+    config.active_record.default_timezone = :local
+
     config.autoload_lib(ignore: %w[assets tasks])
 
     # その他の設定
-    # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end

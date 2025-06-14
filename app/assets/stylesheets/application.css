@@ -1,127 +1,99 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
 *= require_tree .
 *= require_self
 */
-/* 背景（薄いピンク） */
+
+/* --- 共通設定 --- */
 body {
-  background-color: white;
-  background-image: linear-gradient(351deg, rgba(191, 214, 255, 1), rgba(255, 198, 206, 1));
-  margin: 0;
-  font-family: sans-serif;
+background-color: white;
+background-image: linear-gradient(351deg, rgba(191, 214, 255, 1), rgba(255, 198, 206, 1));
+margin: 0;
+font-family: sans-serif;
+text-align: center;
+margin-top: 50px;
 }
 
-/* ヘッダー全体*/
+/* --- ヘッダー --- */
 .header {
- background-color: rgba(255, 231, 231, 0.913); /* 半透明白 */
-  backdrop-filter: blur(3px); /* 背景が透けるエフェクト */
-  padding: 1rem;
-  border-bottom: 1px solid rgba(0, 122, 32, 0.3); /* 軽い境界線 */
-  font-family: sans-serif
+background-color: rgba(255, 231, 231, 0.913);
+backdrop-filter: blur(3px);
+padding: 1rem;
+border-bottom: 1px solid rgba(0, 122, 32, 0.3);
 }
 
-/* ヘッダー内レイアウト（ロゴ左・メニュー右） */
 .header-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1000px;
-  margin: 0 auto;
-  font-family: sans-serif
+display: flex;
+justify-content: space-between;
+align-items: center;
+max-width: 1000px;
+margin: 0 auto;
 }
 
-/* ロゴ */
 .logo a {
-  text-decoration: none;
-  color: #ff9d9d;
-  font-size: 1.5rem;
-  font-weight: bold;
-  font-family: sans-serif
+text-decoration: none;
+color: #ff9d9d;
+font-size: 1.5rem;
+font-weight: bold;
 }
 
-/* コンテンツ中央の白いボックス */
-.container {
-  display: flex;
-  justify-content: center;
-  margin-top: 5%;
-  padding-bottom: 2rem; 
-  font-family: sans-serif
-}
-
-.content {
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 122, 32, 0.3);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 800px;
-  font-family: sans-serif
-}
-
-/* ハンバーガーメニュー（三） */
+/* --- メニュー --- */
 .menu-toggle {
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: sans-serif
+font-size: 1.5rem;
+background: none;
+border: none;
+cursor: pointer;
 }
 
-/* メニュー初期状態：非表示 */
 .nav-menu {
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 1rem;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  z-index: 1000;
-  font-family: sans-serif
+display: none;
+position: absolute;
+top: 60px;
+right: 1rem;
+background-color: white;
+box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+border-radius: 6px;
+padding: 0.5rem 1rem;
+z-index: 1000;
 }
 
-/* 表示状態 */
 .nav-menu.active {
-  display: block;
+display: block;
 }
 
-/* メニューの中身 */
 .nav-menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-family: sans-serif
+list-style: none;
+padding: 0;
+margin: 0;
 }
 
 .nav-menu li {
-  margin: 0.5rem 0;
-  font-family: sans-serif
+margin: 0.5rem 0;
 }
 
 .nav-menu a {
-  text-decoration: none;
-  color: #333;
-  font-family: sans-serif
-}
-/* 後で可愛くするCSSここに追加できる */
-body {
-  font-family: sans-serif;
-  text-align: center;
-  margin-top: 50px;
+text-decoration: none;
+color: #333;
 }
 
+/* --- コンテンツ --- */
+.container {
+display: flex;
+justify-content: center;
+margin-top: 5%;
+padding-bottom: 2rem;
+}
+
+.content {
+background-color: #ffffff;
+border: 1px solid rgba(0, 122, 32, 0.3);
+padding: 2rem;
+border-radius: 8px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+width: 90%;
+max-width: 800px;
+}
+
+/* --- タイマー --- */
 #timer {
 font-size: 3em;
 margin-bottom: 20px;
@@ -134,27 +106,35 @@ margin: 5px;
 cursor: pointer;
 }
 
-/* メッセージ表示スタイル */
-#message {
+/* --- メッセージ表示 --- */
+.hidden {
+display: none;
+}
+
+#message img {
+display: block;
+margin: 10px auto 0;
+max-width: 150px;
+}
+
+/* 🌸 花の成長メッセージ用 */
+#flower-message {
 position: fixed;
 top: 20px;
 left: 50%;
 transform: translateX(-50%);
 background-color: rgba(255, 255, 255, 0.9);
-border: 2px solid #88c;
+border: 2px solid rgb(125, 194, 124);
 padding: 10px 20px;
 border-radius: 8px;
 font-size: 1.2em;
 z-index: 1000;
 opacity: 0;
 transition: opacity 0.5s ease, top 0.5s ease;
+text-align: center;
 }
 
-#message.show {
+#flower-message.show {
 opacity: 1;
 top: 40px;
-}
-
-.hidden {
-display: none;
 }

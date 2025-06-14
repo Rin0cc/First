@@ -1,7 +1,7 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("turbo:load", function () {
 const toggle = document.getElementById("menu-toggle");
 const menu = document.getElementById("nav-menu");
 
@@ -15,15 +15,24 @@ let startTime;
 let elapsed = 0;
 let timerInterval;
 
+const timerDisplay = document.getElementById('timer');
+const startBtn = document.getElementById('start');
+const stopBtn = document.getElementById('stop');
+const recordBtn = document.getElementById('record');
+const records = document.getElementById('records');
+const flashMessageContainer = document.getElementById('message');
+
 function updateTimerDisplay(ms) {
 const totalSeconds = Math.floor(ms / 1000);
 const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
 const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
 const seconds = String(totalSeconds % 60).padStart(2, '0');
-document.getElementById('timer').textContent = `${hours}:${minutes}:${seconds}`;
+if (timerDisplay) {
+timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+}
 }
 
-document.getElementById('start')?.addEventListener('click', () => {
+startBtn?.addEventListener('click', () => {
 if (!timerInterval) {
 startTime = Date.now() - elapsed;
 timerInterval = setInterval(() => {
@@ -33,30 +42,45 @@ updateTimerDisplay(elapsed);
 }
 });
 
-document.getElementById('stop')?.addEventListener('click', () => {
+stopBtn?.addEventListener('click', () => {
 clearInterval(timerInterval);
 timerInterval = null;
 });
 
-document.getElementById('record')?.addEventListener('click', () => {
-const currentTime = document.getElementById('timer').textContent;
+recordBtn?.addEventListener('click', () => {
+const currentTime = timerDisplay?.textContent || '00:00:00';
 
-// 記録リストに追加
 const li = document.createElement('li');
 li.textContent = currentTime;
-document.getElementById('records').appendChild(li);
+records?.appendChild(li);
 
-// メッセージと画像を表示
-const message = document.getElementById('message');
-message.innerHTML = `
-🌱 花の種を獲得しました！（${currentTime}）<br>
-<img src="/images/Flowerseeds.png" alt="花の種" style="width: 100px; margin-top: 10px;" />
-`;
-message.classList.remove('hidden');
-message.classList.add('show');
+showMessage("花が育ちました🌸", "/assets/images/Flowerseed.png");
+});
+
+if (flashMessageContainer) {
+const flashMessage = flashMessageContainer.dataset.flashMessage;
+const flashImage = flashMessageContainer.dataset.flashImage;
+
+if (flashMessage) {
+showMessage(flashMessage, flashImage);
+}
+}
+
+// 🌸 メッセージ表示関数
+function showMessage(text, imagePath = null) {
+const messageDiv = document.getElementById("flower-message");
+
+if (messageDiv) {
+messageDiv.innerHTML = imagePath
+? `${text}<br><img src="${imagePath}" alt="花が育つ" style="max-width: 120px; margin-top: 10px;">`
+: text;
+
+messageDiv.classList.remove("hidden");
+messageDiv.classList.add("show");
 
 setTimeout(() => {
-message.classList.remove('show');
+messageDiv.classList.remove("show");
 }, 3000);
-});
+}
+}
 });

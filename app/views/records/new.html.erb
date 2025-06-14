@@ -7,19 +7,25 @@
 <button id="stop">停止</button>
 <button id="record">記録</button>
 
-<!-- メッセージと種画像 -->
-<div id="message" class="hidden"></div>
-<div id="seed-image" style="display: none;">
-<img src="/assets/seed.png" alt="花の種" />
+<div id="flower-message" class="hidden"></div>
+
+<% if flash[:notice] || flash[:alert] %>
+<div id="message"
+data-flash-message="<%= flash[:notice] || flash[:alert] %>"
+data-flash-image="<%= asset_path(flash[:flower_image]) if flash[:flower_image] %>"
+class="hidden">
 </div>
+<% end %>
 
 <ul id="records"></ul>
 </div>
 
-<!-- 記録内容のフォーム -->
-<%= form_with model: [@user_flower, @record], local: true do |f| %>
-<div>
-<%= f.label :task_name, "今日やったこと" %><br>
-<%= f.text_area :task_name %>
-</div>
+<!-- ✅ 記録内容のフォーム -->
+<%= form_with model: [@user_flower, @record], data: { turbo: false } do |f| %>
+<%= f.label :task_name, "作業内容" %>
+<%= f.text_field :task_name %>
+
+<!-- 初期値は 0 -->
+<%= hidden_field_tag :time, 0, id: "timer_seconds" %>
+<%= f.hidden_field :time, id: "record_time" %>
 <% end %>
