@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "pages/terms"
   get "records/new"
   get "records/create"
   devise_for :users
@@ -11,7 +12,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-
+  get 'terms', to: 'pages#terms'
   # トップページ
   root "top#index"
 
