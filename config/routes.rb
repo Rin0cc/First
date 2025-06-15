@@ -16,10 +16,10 @@ Rails.application.routes.draw do
   root "top#index"
 
   # ユーザーのマイページ表示
-  resources :users, only: [:show]
+  resources :users, only: [ :show ]
 
   # 花ごとの記録（ネスト構造）
   resources :user_flowers do
-    resources :records, only: [:new, :create]
+    resources :records, only: [ :new, :create ]
   end
 end

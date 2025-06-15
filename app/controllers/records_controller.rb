@@ -25,7 +25,7 @@ class RecordsController < ApplicationController
 
       record_days = @user_flower.records
         .pluck(:created_at)
-        .map { |t| t.in_time_zone('Asia/Tokyo').to_date }
+        .map { |t| t.in_time_zone("Asia/Tokyo").to_date }
         .uniq
       day_count = record_days.count
 
@@ -45,7 +45,7 @@ class RecordsController < ApplicationController
       when 7
         @user_flower.update(status: :full_bloom)
         flash[:notice] = "🌸 花が咲きました！"
-        random_image = ["FullBloom1.png", "FullBloom2.png"].sample
+        random_image = [ "FullBloom1.png", "FullBloom2.png" ].sample
         flash[:flower_image] = random_image
       else
         flash[:notice] = "✨ 記録ありがとう！"

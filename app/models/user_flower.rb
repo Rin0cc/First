@@ -14,7 +14,7 @@ validate :only_one_growing_flower_per_user, on: :create
 
 private
 
-# 同時に育てている花があればNG（満開以外が育成中とみなす）
+   # 同時に育てている花があればNG（満開以外が育成中とみなす）
    def only_one_growing_flower_per_user
     if user.user_flowers.where.not(status: "full_bloom").exists?
       errors.add(:base, "同時に育てられる花は1つだけです。")

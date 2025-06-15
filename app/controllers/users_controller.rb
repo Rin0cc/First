@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if @user.update(user_params)  
+    if @user.update(user_params)
       redirect_to @user, notice: "更新しました"
     else
       render :edit
@@ -19,6 +19,6 @@ class UsersController < ApplicationController
   end
 
   def create_user_flower
-    UserFlower.create(user:self)
+    UserFlower.create(user: self)
 end
 end
