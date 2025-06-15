@@ -1,2 +1,23 @@
-<h1>テスト</h1>
-<p>このページは、<%= link_to 'トップページ', root_path %> です。</p>
+<div class="top-page">
+  <div class="top-content">
+  <h1 class="logo">ぶるーみんぐれこーど</h1>
+  
+  <!-- 画像をここに追加 -->
+  <%= image_tag "top-image.png", alt: "アプリのイメージ", class: "top-image" %>
+
+  <p class="catchphrase">
+  毎日の小さな一歩が、やがて花を咲かせる。<br>
+  記録を続けて、7日間で花を咲かせよう <br>
+  花を育てる、わたしを育てる🌱
+  </p>
+
+  <%= link_to "はじめる", root_path, class: "start-button" %>
+
+  <p class="description">
+  機能紹介：<br>
+  毎日記録するだけで成長していく<br>
+  「花育て 記録アプリ」<br>
+  記録すると花が咲くよ🌸
+  </p>
+  </div>
+</div>

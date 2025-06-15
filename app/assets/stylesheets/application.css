@@ -138,3 +138,59 @@ text-align: center;
 opacity: 1;
 top: 40px;
 }
+.top-page {
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.top-content {
+background-color: #fff;
+border-radius: 10px;
+padding: 2rem;
+text-align: center;
+max-width: 600px;
+width: 100%;
+}
+
+.logo {
+font-size: 2rem;
+color: #ff9d9d;
+margin-bottom: 1rem;
+}
+
+.catchphrase {
+font-size: 1.1rem;
+line-height: 1.6;
+margin-bottom: 1.5rem;
+}
+
+.top-image {
+max-width: 100%;
+height: auto;
+border-radius: 8px;
+margin-bottom: 1.5rem;
+}
+
+.start-button {
+display: inline-block;
+background-color: #b4e3a0;
+color: #333;
+padding: 0.8rem 1.6rem;
+border-radius: 6px;
+text-decoration: none;
+margin-bottom: 1.5rem;
+font-weight: bold;
+transition: background-color 0.3s;
+}
+
+.start-button:hover {
+background-color: #a1d38e;
+}
+
+.description {
+font-size: 1rem;
+line-height: 1.6;
+color: #555;
+}
