@@ -9,19 +9,18 @@
 
 <div id="flower-message" class="hidden"></div>
 
-<% if flash[:notice] || flash[:alert] %>
-<div id="message"
-data-flash-message="<%= flash[:notice] || flash[:alert] %>"
-data-flash-image="<%= asset_path(flash[:flower_image]) if flash[:flower_image] %>"
-class="hidden">
+<div id="flash-message"
+data-flash-message="<%= j flash[:notice] %>"
+data-flash-image="<%= image_path(flash[:flower_image]) if flash[:flower_image] %>">
 </div>
-<% end %>
+
+<div id="flower-message" class="message hidden"></div>
 
 <ul id="records"></ul>
 </div>
 
 <!-- ✅ 記録内容のフォーム -->
-<%= form_with model: [@user_flower, @record], data: { turbo: false } do |f| %>
+<%= form_with model: @record, url: records_path, data: { turbo: false } do |f| %>
 <%= f.label :task_name, "作業内容" %>
 <%= f.text_field :task_name %>
 

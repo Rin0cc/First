@@ -4,7 +4,6 @@ class UserFlower < ApplicationRecord
   has_many :records, dependent: :destroy
 
   enum status: {
-    none: "なし",
     seed: "種",
     sprout: "芽",
     bud: "水やり",
