@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 # 利用規約など静的ページ
 get "pages/terms"
-get "terms", to: "pages#terms"
-get "privacy", to: "pages#privacy"
+get "pages/terms", to: "pages#terms", as: "pages_terms"
+get "pages/privacy", to: "pages#privacy", as: "pages_privacy"
 
 # devise関連
 devise_for :users

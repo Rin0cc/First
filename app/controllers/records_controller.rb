@@ -66,7 +66,7 @@ def set_user_flower
     @user_flower = UserFlower.find(params[:user_flower_id])
   else
     @user_flower = current_user.user_flowers.where.not(status: :full_bloom).first
-    redirect_to root_path, alert: '育成中の花が見つかりません' if @user_flower.nil?
+    redirect_to root_path, alert: "育成中の花が見つかりません" if @user_flower.nil?
   end
 end
 
