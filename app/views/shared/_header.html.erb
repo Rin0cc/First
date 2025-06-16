@@ -4,8 +4,8 @@
       <li><%= link_to "ホーム", root_path %></li>
       <li><%= link_to "新規登録", new_user_registration_path %></li>
       <li><%= link_to "ログイン", new_user_session_path %></li>
-      <li><%= link_to "プライバシーポリシー", privacy_path %></li>
-      <li><%= link_to "利用規約",terms_path %></li>
+      <li><%= link_to "プライバシーポリシー", pages_privacy_path%></li>
+      <li><%= link_to "利用規約",  pages_terms_path %></li>
       <li><%= link_to "マイページ", new_user_session_path %></li>
       <li><%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %></li>
     </ul>
