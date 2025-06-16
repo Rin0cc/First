@@ -63,7 +63,7 @@ RUNTEQのポモドーロ勉強法を取り入れたことで、自分の努力�
 - 花の成長演出（タスクとの連動・アニメーション強化）
 
 ## ■ 機能の実装方針予定  
-- フロントエンド：HTML / CSS / JavaScript / Anime.js  
+- フロントエンド：HTML / CSS / JavaScript  
 - バックエンド：Ruby on Rails  
 - データ保存：PostgreSQL
 
@@ -71,4 +71,5 @@ RUNTEQのポモドーロ勉強法を取り入れたことで、自分の努力�
 Figma：https://www.figma.com/design/4kCCVCXhWqxJIdVIifQLZE/%E7%84%A1%E9%A1%8C?node-id=0-1&t=IfvO9akxVBHhT3rq-1
 
 ### ER図
+[![Image from Gyazo](https://i.gyazo.com/6ccfee68a2d05406fa2a13fe0c472cb3.png)](https://gyazo.com/6ccfee68a2d05406fa2a13fe0c472cb3)
 ER図：https://app.diagrams.net/#G19dhmxyBBigMYUA72SGwaE7c-xSvxEKhQ#%7B%22pageId%22%3A%225xM9FkNxEeX8kEIw1n2u%22%7D
