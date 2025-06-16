@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 # 利用規約など静的ページ
-get "pages/terms"
 get "pages/terms", to: "pages#terms", as: "pages_terms"
 get "pages/privacy", to: "pages#privacy", as: "pages_privacy"
 
