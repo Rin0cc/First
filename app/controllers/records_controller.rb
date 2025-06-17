@@ -62,14 +62,10 @@ class RecordsController < ApplicationController
 
   private
 
-def set_user_flower
-  if params[:user_flower_id].present?
-    @user_flower = UserFlower.find(params[:user_flower_id])
-  else
-    @user_flower = current_user.user_flowers.where.not(status: :full_bloom).first
-    redirect_to root_path, alert: "育成中の花が見つかりません" if @user_flower.nil?
+  def set_user_flower
+    @user_flower = current_user.user_flowers.order(created_at: :desc).first
+    redirect_to root_path, alert: "花が見つかりません" if @user_flower.nil?
   end
-end
 
   def record_params
     params.require(:record).permit(:task_name)

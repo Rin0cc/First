@@ -13,6 +13,10 @@ root "top#index"
 # マイページ
 resources :users, only: [ :show ]
 
+resources :user_flowers do
+  resources :records, only: [:new, :create]
+end
+
 # 🌱 花は裏で育てる
 resources :records, only: [ :new, :create, :index, :show ]
 
