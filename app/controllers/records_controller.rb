@@ -14,6 +14,10 @@ class RecordsController < ApplicationController
       return
     end
 
+    @user_flower ||= current_user.user_flowers.create(
+      flower: Flower.first,
+      status: :waiting  )
+
     @record = @user_flower.records.build(
       time: time_in_seconds,
       task_name: record_params[:task_name]
@@ -63,10 +67,20 @@ end
 
   private
 
-  def set_user_flower
-    @user_flower = current_user.user_flowers.where.not(status: :full_bloom).order(created_at: :desc).first
-    redirect_to root_path, alert: "花が見つかりません" if @user_flower.nil?
-    end
+def set_user_flower
+  @user_flower =
+    current_user.user_flowers
+                .where.not(status: :full_bloom)
+                .order(created_at: :desc)
+                .first ||
+    current_user.user_flowers
+                .where(status: :waiting)
+                .order(created_at: :desc)
+                .first
+
+  # 花がなくてもOKに変更（リダイレクトを消す）
+end
+
 
   def record_params
     params.require(:record).permit(:task_name)
