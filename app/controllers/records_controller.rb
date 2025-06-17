@@ -10,7 +10,7 @@ class RecordsController < ApplicationController
 
     if time_in_seconds < 1800
       flash[:alert] = "30分以上じゃないと記録できないよ"
-      redirect_to new_user_flower_record_path(@user_flower)
+      redirect_to new_user_flower_record_path(@user_flower), status: :see_other
       return
     end
 
@@ -21,6 +21,7 @@ class RecordsController < ApplicationController
     @record.user = current_user
 
     if @record.save
+      flash[:flower_image] = "Thanks.png"
       @user_flower.reload
 
       record_days = @user_flower.records
