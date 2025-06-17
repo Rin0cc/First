@@ -7,16 +7,11 @@
 <button id="stop">停止</button>
 <button id="record">記録</button>
 
-<div id="flower-message" class="hidden"></div>
-
-<div id="flash-message"
-data-flash-message="<%= j flash[:notice] %>"
-data-flash-image="<%= image_path(flash[:flower_image]) if flash[:flower_image] %>">
-</div>
-
-<div id="flower-message" class="message hidden"></div>
-
-<ul id="records"></ul>
+<!-- application.html.erbのbody内に配置 -->
+<div id="flower-message"
+data-flash-message="<%= flash[:notice] || '' %>"
+data-flash-image="<%= asset_path(flash[:flower_image]) if flash[:flower_image] %>"
+class="message hidden">
 </div>
 
 <!-- ✅ 記録内容のフォーム -->
