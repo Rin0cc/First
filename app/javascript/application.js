@@ -51,7 +51,9 @@ document.addEventListener("turbo:load", function () {
     const li = document.createElement('li');
     li.textContent = currentTime;
     records?.appendChild(li);
-    showMessage("花が育ちました🌸", "/assets/images/Flowerseed.png");
+
+    // 💥 ここ削除またはコメントアウト！
+    // showMessage("花が育ちました🌸", "/assets/images/Flowerseed.png");
   });
 
   // 🌸 Flashメッセージがあれば表示
@@ -82,22 +84,35 @@ document.addEventListener("turbo:load", function () {
     }
   }
 });
-document.addEventListener("DOMContentLoaded", function () {
-showFlashIfNeeded();
-});
 
-document.addEventListener("turbo:load", function () {
-showFlashIfNeeded();
-});
+// ✅ Flash表示処理を一元化（冗長な処理をまとめた）
+document.addEventListener("DOMContentLoaded", showFlashIfNeeded);
+document.addEventListener("turbo:load", showFlashIfNeeded);
 
 function showFlashIfNeeded() {
-const flashDiv = document.getElementById("flower-message");
-if (flashDiv) {
-const text = flashDiv.dataset.flashMessage;
-const image = flashDiv.dataset.flashImage;
-if (text) {
-showMessage(text, image);
+  const flashDiv = document.getElementById("flower-message");
+  if (flashDiv) {
+    const text = flashDiv.dataset.flashMessage;
+    const image = flashDiv.dataset.flashImage;
+    if (text) {
+      showMessage(text, image);
+    }
+  }
 }
+
+function showMessage(text, imagePath = null) {
+  const messageDiv = document.getElementById("flower-message");
+
+  if (messageDiv) {
+    messageDiv.innerHTML = imagePath
+      ? `${text}<br><img src="${imagePath}" alt="花が育つ" style="max-width: 120px; margin-top: 10px;">`
+      : text;
+
+    messageDiv.classList.remove("hidden");
+    messageDiv.classList.add("show");
+
+    setTimeout(() => {
+      messageDiv.classList.remove("show");
+    }, 3000);
+  }
 }
-}
-showMessage("テストメッセージ🌼", "/assets/images/Flowerseed.png");

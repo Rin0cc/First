@@ -8,8 +8,7 @@
 <button id="record">記録</button>
 
 <!-- application.html.erbのbody内に配置 -->
-<div id="flower-message"
-data-flash-message="<%= flash[:notice] || '' %>"
+<div id="flower-message"data-flash-message="<%= flash[:notice] || '' %>"
 data-flash-image="<%= asset_path(flash[:flower_image]) if flash[:flower_image] %>"
 class="message hidden">
 </div>

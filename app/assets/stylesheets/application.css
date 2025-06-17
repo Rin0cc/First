@@ -214,3 +214,7 @@ text-align: center;
 opacity: 1;
 top: 40px;
 }
+
+#flower-message .hidden {
+display: none;
+}
