@@ -4,10 +4,11 @@ class UserFlower < ApplicationRecord
   has_many :records, dependent: :destroy
 
   enum status: {
-    seed: "種",
-    sprout: "芽",
-    bud: "水やり",
-    full_bloom: "満開"
+    waiting: 0 ,# 待機中,
+    seed: 1 ,#種,
+    sprout: 2, #"芽",
+    bud: 3, #"水やり",
+    full_bloom: 4 ,#"満開"
   }
 
   validate :only_one_growing_flower_per_user, on: :create
