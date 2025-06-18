@@ -1,118 +1,63 @@
 import "@hotwired/turbo-rails";
+import "./controllers/application";
 import "./controllers";
 
-document.addEventListener("turbo:load", function () {
-  const toggle = document.getElementById("menu-toggle");
-  const menu = document.getElementById("nav-menu");
+document.addEventListener("turbo:load", () => {
+// 🍔 メニュー
+const toggle = document.getElementById("menu-toggle");
+const menu = document.getElementById("nav-menu");
+toggle?.addEventListener("click", () => menu?.classList.toggle("active"));
 
-  if (toggle && menu) {
-    toggle.addEventListener("click", function () {
-      menu.classList.toggle("active");
-    });
-  }
-
-  let startTime;
-  let elapsed = 0;
-  let timerInterval;
-
-  const timerDisplay = document.getElementById('timer');
-  const startBtn = document.getElementById('start');
-  const stopBtn = document.getElementById('stop');
-  const recordBtn = document.getElementById('record');
-  const records = document.getElementById('records');
-
-  function updateTimerDisplay(ms) {
-    const totalSeconds = Math.floor(ms / 1000);
-    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-    const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-    const seconds = String(totalSeconds % 60).padStart(2, '0');
-    if (timerDisplay) {
-      timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
-    }
-  }
-
-  startBtn?.addEventListener('click', () => {
-    if (!timerInterval) {
-      startTime = Date.now() - elapsed;
-      timerInterval = setInterval(() => {
-        elapsed = Date.now() - startTime;
-        updateTimerDisplay(elapsed);
-      }, 100);
-    }
-  });
-
-  stopBtn?.addEventListener('click', () => {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  });
-
-  recordBtn?.addEventListener('click', () => {
-    const currentTime = timerDisplay?.textContent || '00:00:00';
-    const li = document.createElement('li');
-    li.textContent = currentTime;
-    records?.appendChild(li);
-
-    // 💥 ここ削除またはコメントアウト！
-    // showMessage("花が育ちました🌸", "/assets/images/Flowerseed.png");
-  });
-
-  // 🌸 Flashメッセージがあれば表示
-  const flashDiv = document.getElementById("flower-message");
-  if (flashDiv) {
-    const text = flashDiv.dataset.flashMessage;
-    const image = flashDiv.dataset.flashImage;
-    if (text) {
-      showMessage(text, image);
-    }
-  }
-
-  // 🌸 メッセージ表示関数
-  function showMessage(text, imagePath = null) {
-    const messageDiv = document.getElementById("flower-message");
-
-    if (messageDiv) {
-      messageDiv.innerHTML = imagePath
-        ? `${text}<br><img src="${imagePath}" alt="花が育つ" style="max-width: 120px; margin-top: 10px;">`
-        : text;
-
-      messageDiv.classList.remove("hidden");
-      messageDiv.classList.add("show");
-
-      setTimeout(() => {
-        messageDiv.classList.remove("show");
-      }, 3000);
-    }
-  }
+// ⏱️ タイマー
+let elapsed = 0, timerInterval, startTime;
+const timerDisplay = document.getElementById("timer");
+document.getElementById("start")?.addEventListener("click", () => {
+if (timerInterval) return;
+startTime = Date.now() - elapsed;
+timerInterval = setInterval(() => {
+elapsed = Date.now() - startTime;
+const sec = Math.floor(elapsed / 1000);
+timerDisplay.textContent = [Math.floor(sec/3600), Math.floor(sec/60)%60, sec%60]
+.map(n => String(n).padStart(2,'0')).join(":");
+}, 100);
+});
+document.getElementById("stop")?.addEventListener("click", () => {
+clearInterval(timerInterval); timerInterval = null;
 });
 
-// ✅ Flash表示処理を一元化（冗長な処理をまとめた）
-document.addEventListener("DOMContentLoaded", showFlashIfNeeded);
-document.addEventListener("turbo:load", showFlashIfNeeded);
+// 🌸 記録（非同期POST）
+document.addEventListener("click", async (e) => {
+if (e.target.id !== "record") return;
+const [hh, mm, ss] = timerDisplay.textContent.split(":").map(Number);
+const payload = {
+time: hh*3600 + mm*60 + ss,
+record: { task_name: document.getElementById("task_name")?.value }
+};
+const url = e.target.dataset.url;
+if (!url) return console.warn("⚠️ data-url missing");
 
-function showFlashIfNeeded() {
-  const flashDiv = document.getElementById("flower-message");
-  if (flashDiv) {
-    const text = flashDiv.dataset.flashMessage;
-    const image = flashDiv.dataset.flashImage;
-    if (text) {
-      showMessage(text, image);
-    }
-  }
+try {
+const res = await fetch(url, {
+method: "POST",
+headers: {
+"Content-Type":"application/json",
+"X-CSRF-Token": document.querySelector("[name='csrf-token']").content
+},
+body: JSON.stringify(payload)
+});
+const { status, message, image } = await res.json();
+if (["success", "short_time", "error"].includes(status)) {
+const div = document.getElementById("flower-message");
+div.innerHTML = image
+? `${message}<br><img src="/assets/${image}" style="max-width:120px;">`
+: message;
+div.classList.remove("hidden");
+div.classList.add("show");
+setTimeout(() => div.classList.remove("show"), 3000);
 }
-
-function showMessage(text, imagePath = null) {
-  const messageDiv = document.getElementById("flower-message");
-
-  if (messageDiv) {
-    messageDiv.innerHTML = imagePath
-      ? `${text}<br><img src="${imagePath}" alt="花が育つ" style="max-width: 120px; margin-top: 10px;">`
-      : text;
-
-    messageDiv.classList.remove("hidden");
-    messageDiv.classList.add("show");
-
-    setTimeout(() => {
-      messageDiv.classList.remove("show");
-    }, 3000);
-  }
+} catch (err) {
+console.error(err);
+alert("通信エラーが発生しました");
 }
+});
+});

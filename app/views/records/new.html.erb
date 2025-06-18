@@ -1,24 +1,27 @@
+
 <h2>記録しよう！</h2>
 
 <div id="timer-section">
-<div id="timer">00:00:00</div>
+  <div id="timer">00:00:00</div>
 
-<button id="start">開始</button>
-<button id="stop">停止</button>
-<button id="record">記録</button>
+  <button id="start">開始</button>
+  <button id="stop">停止</button>
+  <button id="record" data-url="<%= user_flower_records_path(@user_flower) %>">
+  記録する
+  </button>
 
-<!-- application.html.erbのbody内に配置 -->
-<div id="flower-message"data-flash-message="<%= flash[:notice] || '' %>"
-data-flash-image="<%= asset_path(flash[:flower_image]) if flash[:flower_image] %>"
-class="message hidden">
+  <!-- flower-messageはJSで内容が差し込まれる -->
+  <div id="flower-message" class="hidden"></div>
+
+  <!-- ✅ 記録内容のフォーム -->
+  <%= form_with model: @record, url: records_path, data: { turbo: false } do |f| %>
+    <div>
+      <%= f.label :task_name, "作業内容" %><br>
+      <%= f.text_field :task_name %>
+    </div>
+
+    <!-- 初期値は 0 -->
+    <%= hidden_field_tag :time, 0, id: "timer_seconds" %>
+    <%= f.hidden_field :time, id: "record_time" %>
+  <% end %>
 </div>
-
-<!-- ✅ 記録内容のフォーム -->
-<%= form_with model: @record, url: records_path, data: { turbo: false } do |f| %>
-<%= f.label :task_name, "作業内容" %>
-<%= f.text_field :task_name %>
-
-<!-- 初期値は 0 -->
-<%= hidden_field_tag :time, 0, id: "timer_seconds" %>
-<%= f.hidden_field :time, id: "record_time" %>
-<% end %>
