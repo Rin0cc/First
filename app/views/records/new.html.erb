@@ -1,4 +1,9 @@
-<h2>記録しよう！</h2>
+<h2>【記録しよう！】</h2>
+<div class="record-description">
+  <p>🌸 <strong>花を咲かせましょう</strong></p>
+  <p>1日30分以上の記録を7日間続けると、あなたの花が咲きます。</p>
+  <p>毎日の積み重ねを楽しみながら、少しずつ育てていきましょう！</p>
+</div>
 
 <div id="timer-section" data-flower-id="<%= @user_flower.id %>">
 <div id="timer">00:00:00</div>
@@ -28,8 +33,8 @@ class="message hidden">
 </div>
 
 <%= form_with model: @record, url: records_path, data: { turbo: false } do |f| %>
-<%= f.label :task_name, "作業内容" %>
-<%= f.text_field :task_name %>
+<!-- <%= f.label :task_name, "作業内容" %>
+<%= f.text_field :task_name %>-->
 <%= hidden_field_tag :time, 0, id: "timer_seconds" %>
 <%= f.hidden_field :time, id: "record_time" %>
 <% end %>

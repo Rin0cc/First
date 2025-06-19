@@ -30,7 +30,7 @@ class RecordsController < ApplicationController
       render json: {
         status: "success",
         message: message,
-        image: ActionController::Base.helpers.image_url(image_file_name) # これでOK
+        image: ActionController::Base.helpers.image_url("Thanks.png") # これでOK
       }
     else
       render json: {
@@ -60,7 +60,7 @@ class RecordsController < ApplicationController
   def update_flower_status
     if @user_flower.records.empty?
       @user_flower.update(status: :seed)
-      return ["🪴 花の種を取得しました", "Flowerseeds.png"]
+      return [ "🪴 花の種を取得しました", "Flowerseeds.png" ]
     end
 
     record_days = @user_flower.records
@@ -73,22 +73,22 @@ class RecordsController < ApplicationController
     case day_count
     when 1
       @user_flower.update(status: :seed)
-      ["🪴 花の種を取得しました", "Flowerseeds.png"]
+      [ "🪴 花の種を取得しました", "Flowerseeds.png" ]
     when 2
       @user_flower.update(status: :sprout)
-      ["🌱 花の芽が出ました", "Sprout.png"]
+      [ "🌱 花の芽が出ました", "Sprout.png" ]
     when 3..6
       @user_flower.update(status: :bud)
-      ["💧 花に水やりしました", "Bud.png"]
+      [ "💧 花に水やりしました", "Bud.png" ]
     when 7
       @user_flower.update(status: :full_bloom)
       current_user.user_flowers.create(
         flower: Flower.first,
         status: :waiting
       )
-      ["🌸 花が咲きました！", ["FullBloom1.png", "FullBloom2.png"].sample.to_s]
+      [ "🌸 花が咲きました！", [ "FullBloom1.png", "FullBloom2.png" ].sample.to_s ]
     else
-      ["✨ 記録ありがとう！", "Thanks.png"]
+      [ "✨ 記録ありがとう！", "Thanks.png" ]
     end
   end
 
