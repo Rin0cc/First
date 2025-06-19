@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_12_120057) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_17_074458) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_120057) do
     t.string "bloom_image_path"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "growth_image_path"
   end
 
   create_table "records", force: :cascade do |t|
@@ -35,9 +36,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_12_120057) do
   create_table "user_flowers", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "flower_id", null: false
-    t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0, null: false
     t.index ["flower_id"], name: "index_user_flowers_on_flower_id"
     t.index ["user_id"], name: "index_user_flowers_on_user_id"
   end

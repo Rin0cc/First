@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= content_for?(:title) ? yield(:title) : "MyApp" %></title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= javascript_include_tag "application", type: "module" %>
-</head>
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : "MyApp" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
+  </head>
 
-<body>
-  <header class="header">
-    <div class="header-inner">
-      <div class="logo">
-        <%= link_to 'ぶるーみんぐれこーど', root_path %>
+  <body>
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo">
+          <%= link_to 'ぶるーみんぐれこーど', root_path %>
+        </div>
+        <div class="menu-area">
+          <button class="menu-toggle" id="menu-toggle">☰</button>
+          <nav class="nav-menu" id="nav-menu">
+            <ul>
+              <%= render 'shared/header' %>
+            </ul>
+          </nav>
+        </div>
       </div>
-      <div class="menu-area">
-        <button class="menu-toggle" id="menu-toggle">☰</button>
-        <nav class="nav-menu" id="nav-menu">
-          <ul>
-            <%= render 'shared/header' %>
-          </ul>
-        </nav>
+    </header>
+
+    <main class="container">
+      <div class="content">
+        <%= yield %>
+      
       </div>
-    </div>
-  </header>
+    </main>
 
-  <!-- 🌸 花が育つメッセージ表示エリア -->
-  <div id="flower-message" class="message"></div>
-
-  <main class="container">
-    <div class="content">
-      <%= yield %>
-    </div>
-  </main>
-
-  <footer>
-    <%= render 'shared/footer' %>
-  </footer>
-</body>
+    <footer>
+      <%= render 'shared/footer' %>
+    </footer>
+  </body>
 </html>
