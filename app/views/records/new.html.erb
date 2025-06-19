@@ -1,27 +1,35 @@
-
 <h2>記録しよう！</h2>
 
-<div id="timer-section">
-  <div id="timer">00:00:00</div>
+<div id="timer-section" data-flower-id="<%= @user_flower.id %>">
+<div id="timer">00:00:00</div>
+<button id="start">開始</button>
+<button id="stop">停止</button>
+<button id="record">記録する</button>
 
-  <button id="start">開始</button>
-  <button id="stop">停止</button>
-  <button id="record" data-url="<%= user_flower_records_path(@user_flower) %>">
-  記録する
-  </button>
-
-  <!-- flower-messageはJSで内容が差し込まれる -->
-  <div id="flower-message" class="hidden"></div>
-
-  <!-- ✅ 記録内容のフォーム -->
-  <%= form_with model: @record, url: records_path, data: { turbo: false } do |f| %>
-    <div>
-      <%= f.label :task_name, "作業内容" %><br>
-      <%= f.text_field :task_name %>
-    </div>
-
-    <!-- 初期値は 0 -->
-    <%= hidden_field_tag :time, 0, id: "timer_seconds" %>
-    <%= f.hidden_field :time, id: "record_time" %>
-  <% end %>
+<div id="seed-image" style="display: none;">
+<img src="<%= asset_path('Sprout.png') %>" alt="花の種" />
 </div>
+
+<div id="message" class="hidden"></div>
+<ul id="records"></ul>
+</div>
+
+<div
+id="flower-message"
+data-flash-message="<%= j(flash[:notice] || flash[:alert]) %>"
+data-flash-image="<%= image_path(flash[:flower_image]) if flash[:flower_image].present? %>"
+**data-flowerseeds-url="<%= image_url('Flowerseeds.png') %>"
+data-sprout-url="<%= image_url('Sprout.png') %>"
+data-bud-url="<%= image_url('Bud.png') %>"
+data-fullbloom1-url="<%= image_url('FullBloom1.png') %>"
+data-fullbloom2-url="<%= image_url('FullBloom2.png') %>"
+data-thanks-url="<%= image_url('Thanks.png') %>"**
+class="message hidden">
+</div>
+
+<%= form_with model: @record, url: records_path, data: { turbo: false } do |f| %>
+<%= f.label :task_name, "作業内容" %>
+<%= f.text_field :task_name %>
+<%= hidden_field_tag :time, 0, id: "timer_seconds" %>
+<%= f.hidden_field :time, id: "record_time" %>
+<% end %>

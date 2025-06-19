@@ -107,7 +107,7 @@ cursor: pointer;
 
 /* ========== メッセージ表示 ========== */
 .hidden {
-display: none;
+display:  none;
 }
 
 #message img {
@@ -116,27 +116,7 @@ margin: 10px auto 0;
 max-width: 150px;
 }
 
-/* 🌸 花の成長メッセージ用 */
-#flower-message {
-position: fixed;
-top: 20px;
-left: 50%;
-transform: translateX(-50%);
-background-color: rgba(255, 255, 255, 0.9);
-border: 2px solid rgb(125, 194, 124);
-padding: 10px 20px;
-border-radius: 8px;
-font-size: 1.2em;
-z-index: 1000;
-opacity: 0;
-transition: opacity 0.5s ease, top 0.5s ease;
-text-align: center;
-}
 
-#flower-message.show {
-opacity: 1;
-top: 40px;
-}
 
 /* ========== トップページ ========== */
 .top-page {
@@ -195,16 +175,29 @@ font-size: 1rem;
 line-height: 1.6;
 color: #555;
 }
-#flash-message.hidden {
-  display: none;
-}
-#flash-message.show {
+#seed-image img {
+  width: 100px;
+  height: auto;
   display: block;
-  text-align: center;
-  animation: fadein 0.3s;
+  margin: 0 auto;
+}
+#flower-message {
+position: fixed;
+top: 20px;
+left: 50%;
+transform: translateX(-50%);
+background-color: rgba(255, 255, 255, 0.95);
+border: 2px solid #a1d8af;
+padding: 12px 20px;
+border-radius: 10px;
+font-size: 1.2em;
+opacity: 0;
+z-index: 9999;
+transition: opacity 0.4s ease, top 0.4s ease;
 }
 
-@keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+#flower-message.show {
+  opacity: 1;
+  top: 40px;
+  display: block; 
 }

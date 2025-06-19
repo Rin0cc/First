@@ -14,11 +14,11 @@ root "top#index"
 resources :users, only: [ :show ]
 
 resources :user_flowers do
-  resources :records, only: [:new, :create]
+  resources :records, only: [ :new, :create ]
 end
 
 # 🌱 花は裏で育てる
-resources :records, only: [ :new, :create, ]
+resources :records, only: [ :new, :create ]
 
 # 開発環境専用のメール確認
 mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
