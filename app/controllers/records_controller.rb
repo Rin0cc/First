@@ -12,7 +12,7 @@ class RecordsController < ApplicationController
       render json: {
         status: "short_time",
         message: "✨ 記録ありがとう！（30分以上から花は育つよ）",
-        image: ActionController::Base.helpers.image_url("Thanks.png")
+        image: ActionController::Base.helpers.image_url("Thanks.png") # これでOK
       }
       return
     end
@@ -25,19 +25,18 @@ class RecordsController < ApplicationController
 
     if @record.save
       @user_flower.reload
-
       message, image_file_name = update_flower_status
+
       render json: {
         status: "success",
         message: message,
-        image: ActionController::Base.helpers.image_url("Thanks.png")
+        image: ActionController::Base.helpers.image_url("Thanks.png") # これでOK
       }
-
     else
       render json: {
         status: "error",
         message: "記録ありがとう✨",
-        image: ActionController::Base.helpers.image_url("Thanks.png")
+        image: ActionController::Base.helpers.image_url("Thanks.png") # これでOK
       }, status: :unprocessable_entity
     end
   end
@@ -45,14 +44,17 @@ class RecordsController < ApplicationController
   private
 
   def set_user_flower
-    @user_flower = current_user.user_flowers.order(created_at: :desc).first
+    @user_flower =
+      current_user.user_flowers
+                  .where.not(status: :full_bloom)
+                  .or(current_user.user_flowers.where(status: :waiting))
+                  .order(created_at: :desc)
+                  .first
 
-    unless @user_flower
-      @user_flower = current_user.user_flowers.create(
-        flower: Flower.first,
-        status: :waiting
-      )
-    end
+    @user_flower ||= current_user.user_flowers.create(
+      flower: Flower.first,
+      status: :waiting
+    )
   end
 
   def update_flower_status
