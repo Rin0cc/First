@@ -77,7 +77,16 @@ class RecordsController < ApplicationController
     when 2
       @user_flower.update(status: :sprout)
       [ "🌱 花の芽が出ました", "Sprout.png" ]
-    when 3..6
+    when 3
+      @user_flower.update(status: :bud)
+      [ "💧 花に水やりしました", "Bud.png" ]
+    when 4
+      @user_flower.update(status: :bud)
+      [ "💧 花に水やりしました", "Bud.png" ]
+    when 5
+      @user_flower.update(status: :bud)
+      [ "💧 花に水やりしました", "Bud.png" ]
+    when 6
       @user_flower.update(status: :bud)
       [ "💧 花に水やりしました", "Bud.png" ]
     when 7
