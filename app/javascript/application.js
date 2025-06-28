@@ -3,11 +3,13 @@ import "./controllers";
 
 function showMessage(text, imageUrl = null) {
   const flashDiv = document.getElementById("flower-message");
+  // textがnullやundefinedの場合に備えて、表示するメッセージを調整
+  const displayMessage = text || "メッセージがありません";
 
   if (flashDiv) {
     flashDiv.innerHTML = imageUrl
-      ? `${text}<br><img src="${imageUrl}" alt="花の画像" style="max-width: 120px; margin-top: 10px;">`
-      : text;
+      ? `${displayMessage}<br><img src="${imageUrl}" alt="花の画像" style="max-width: 120px; margin-top: 10px;">`
+      : displayMessage; // displayMessage を使う
 
     flashDiv.classList.remove("hidden");
     flashDiv.classList.add("show");
@@ -62,12 +64,14 @@ document.addEventListener("turbo:load", () => {
   });
 
   const recordButton = document.getElementById("record");
-  const flowerId = document.getElementById("timer-section")?.dataset.flowerId;
+  // 🌸 ここを const から let に変更！
+  let currentFlowerId = document.getElementById("timer-section")?.dataset.flowerId;
 
   recordButton?.addEventListener("click", () => {
     const taskName = document.querySelector("input[name='record[task_name]']")?.value || "";
     const time = Math.floor(elapsed / 1000);
-    const url = flowerId ? `/user_flowers/${flowerId}/records` : "/records";
+    // 🌸 ここも currentFlowerId を使うように変更済み！
+    const url = currentFlowerId ? `/user_flowers/${currentFlowerId}/records` : "/records";
 
     fetch(url, {
       method: "POST",
@@ -94,8 +98,19 @@ document.addEventListener("turbo:load", () => {
         if (data.status === "success") {
           const imageUrl = data.image;
           showMessage(data.message, imageUrl);
+
+          // 🌸 ここを追加！ サーバーから新しいflower_idが返されたら更新する 🌸
+          if (data.new_flower_id) {
+            currentFlowerId = data.new_flower_id; // JavaScriptの変数 currentFlowerId を更新
+            // HTMLの data-flower-id 属性も更新して、次回ページ読み込み時に正しいIDが使われるようにする
+            const timerSection = document.getElementById("timer-section");
+            if (timerSection) {
+              timerSection.dataset.flowerId = data.new_flower_id;
+            }
+            console.log("🌸 新しい花のIDに切り替わりました:", currentFlowerId);
+          }
+
         } else if (data.status === "short_time") {
-          // ✨ ここを修正！ short_time の場合も画像URLを渡す ✨
           const imageUrl = data.image;
           showMessage(data.message, imageUrl);
         } else {
