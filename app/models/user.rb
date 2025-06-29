@@ -7,6 +7,21 @@ class User < ApplicationRecord
 
   after_create :create_initial_flower
 
+  def first_record_date
+    records.order(created_at: :asc).first&.created_at&.in_time_zone("Asia/Tokyo")&.to_date
+  end
+
+  def days_since_first_record
+    first_date = first_record_date
+    return 0 unless first_date 
+    (Date.current - first_date).to_i + 1
+  end
+
+  def total_record_duration_hours
+    total_seconds = records.sum(:time)
+    (total_seconds / 3600.0).round(1)
+  end
+
   private
 
   def create_initial_flower

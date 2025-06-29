@@ -202,13 +202,12 @@ transition: opacity 0.4s ease, top 0.4s ease;
   display: block;
 }
 .record-description {
-  background-color: #ffe7e7; /* 薄いピンクで塗りつぶし */
-  border: 2px solid #ffb6c1; /* 少し濃いピンクの枠線 */
-  border-radius: 10px; /* 角を丸くする */
-  padding: 1.5rem; /* 内側の余白 */
-  margin-bottom: 2rem; /* 下に余白 */
-  text-align: center; /* テキストを中央寄せ */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* ほんのり影をつけて立体感 */
+  color: #6b4c4c;
+  background: #fff5f5;
+  padding: 1em;
+  border: 1px solid #fcd5ce;
+  border-radius: 1em;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .record-description p {
@@ -221,3 +220,16 @@ transition: opacity 0.4s ease, top 0.4s ease;
   color: #ff69b4; /* 「花を咲かせよう！」の文字を濃いピンクに */
   font-size: 1.1em; /* 少し文字を大きく */
 }
+
+.record-time {
+ background: #fff8f0; /* ほんのりピンクベージュの優しい背景 */
+  border: 2px solid #ffc0cb; /* 薄いピンクの枠線 */
+  border-radius: 12px;
+  padding: 1.5em 2em;
+  max-width: 480px;
+  margin: 1em auto;
+  box-shadow: 0 6px 12px rgba(255, 192, 203, 0.3);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #5a3d4a;
+}
+

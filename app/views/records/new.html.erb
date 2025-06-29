@@ -1,10 +1,24 @@
 <h2>【記録しよう！】</h2>
 <div class="record-description">
-  <p>🌸 <strong>花を咲かせましょう</strong></p>
-  <p>1日30分以上の記録を7日間続けると、あなたの花が咲きます。</p>
-  <p>毎日の積み重ねを楽しみながら、少しずつ育てていきましょう！</p>
+  <p>🌸 <strong>記録の方法</strong></p>
+  <p>1. タイマーを使って、30分以上の記録を行います。</p>
+  <p>2. 記録が終わったら「記録する」ボタンを押してください。</p>
+  <p>3. 7日間続けると、花が咲きます！</p>
 </div>
 
+<div class="record-time">
+  <% if current_user %>
+    <% if current_user.first_record_date.present? %>
+      <p>現在記録 <%= current_user.days_since_first_record %> 日目</p>
+      <p>合計 <%= current_user.total_record_duration_hours %> 時間記録したよ🌱</p>
+    <% else %>
+      <p>まだ記録がないみたい！最初の記録を始めよう🌱</p>
+    <% end %>
+  <% else %>
+    <p>記録をつけて、花を育ててみよう！</p>
+  <% end %>
+</div>
+<br>
 
 <div id="timer-section" data-flower-id="<%= @user_flower.id %>">
 <div id="timer">00:00:00</div>
