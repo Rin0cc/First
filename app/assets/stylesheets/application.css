@@ -23,14 +23,15 @@ border-bottom: 1px solid rgba(0, 122, 32, 0.3);
 .header-inner {
 display: flex;
 justify-content: space-between;
-align-items: center;
+align-items: flex-start;
 max-width: 1000px;
-margin: 0 auto;
+margin: -19px auto;
 }
 
 .logo a {
 text-decoration: none;
 color: #ff9d9d;
+align-items: center;
 font-size: 1.5rem;
 font-weight: bold;
 }
