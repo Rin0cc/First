@@ -23,14 +23,15 @@ border-bottom: 1px solid rgba(0, 122, 32, 0.3);
 .header-inner {
 display: flex;
 justify-content: space-between;
-align-items: center;
+align-items: flex-start;
 max-width: 1000px;
-margin: 0 auto;
+margin: -19px auto;
 }
 
 .logo a {
 text-decoration: none;
 color: #ff9d9d;
+align-items: center;
 font-size: 1.5rem;
 font-weight: bold;
 }
@@ -199,4 +200,24 @@ transition: opacity 0.4s ease, top 0.4s ease;
   opacity: 1;
   top: 40px;
   display: block;
+}
+.record-description {
+  background-color: #ffe7e7; /* 薄いピンクで塗りつぶし */
+  border: 2px solid #ffb6c1; /* 少し濃いピンクの枠線 */
+  border-radius: 10px; /* 角を丸くする */
+  padding: 1.5rem; /* 内側の余白 */
+  margin-bottom: 2rem; /* 下に余白 */
+  text-align: center; /* テキストを中央寄せ */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* ほんのり影をつけて立体感 */
+}
+
+.record-description p {
+  margin: 0.5rem 0; /* 段落の上下の余白 */
+  color: #555; /* テキストの色を少し濃くして読みやすく */
+  line-height: 1.6; /* 行の高さを調整して読みやすく */
+}
+
+.record-description strong {
+  color: #ff69b4; /* 「花を咲かせよう！」の文字を濃いピンクに */
+  font-size: 1.1em; /* 少し文字を大きく */
 }

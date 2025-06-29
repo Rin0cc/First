@@ -13,10 +13,14 @@
     <header class="header">
       <div class="header-inner">
         <div class="logo">
-          <%= link_to 'ぶるーみんぐれこーど', root_path %>
+        <%= link_to root_path do %>
+        <%= image_tag "logoheader.png", alt: "ぶるーみんぐれこーど ロゴ", class: "header-logo" %>
+      <% end %>
         </div>
         <div class="menu-area">
-          <button class="menu-toggle" id="menu-toggle">☰</button>
+          <button class="menu-toggle" id="menu-toggle">
+            <%= image_tag "navi.png", alt: "メニュー", class: "menu-icon" %>
+          </button>
           <nav class="nav-menu" id="nav-menu">
             <ul>
               <%= render 'shared/header' %>
