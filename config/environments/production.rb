@@ -102,6 +102,8 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-  config.hosts << 'bloomingrecord.com'
-  config.hosts << 'www.bloomingrecord.com'
+  # ホストの許可設定（Host Authorization）
+  config.hosts << 'bloomingrecord.com'         # 独自ドメイン
+  config.hosts << 'www.bloomingrecord.com'     # 独自ドメインのwwwサブドメイン
+  config.hosts << 'blooming-record.onrender.com' # RenderのデフォルトURL
 end
