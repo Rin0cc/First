@@ -1,15 +1,20 @@
 import "@hotwired/turbo-rails";
 import "./controllers";
 
+// showMessage 関数はそのまま
 function showMessage(text, imageUrl = null) {
   const flashDiv = document.getElementById("flower-message");
-  // textがnullやundefinedの場合に備えて、表示するメッセージを調整
   const displayMessage = text || "メッセージがありません";
 
   if (flashDiv) {
+    // 「すでにログインしています」メッセージを除外
+    if (displayMessage === "You are already signed in." || displayMessage === "すでにログインしています。") {
+      return; // 何も表示しない
+    }
+    
     flashDiv.innerHTML = imageUrl
       ? `${displayMessage}<br><img src="${imageUrl}" alt="花の画像" style="max-width: 120px; margin-top: 10px;">`
-      : displayMessage; // displayMessage を使う
+      : displayMessage;
 
     flashDiv.classList.remove("hidden");
     flashDiv.classList.add("show");
@@ -63,63 +68,82 @@ document.addEventListener("turbo:load", () => {
     timerInterval = null;
   });
 
-  const recordButton = document.getElementById("record");
-  // 🌸 ここを const から let に変更！
-  let currentFlowerId = document.getElementById("timer-section")?.dataset.flowerId;
+  const recordTimeSubmitButton = document.getElementById("record_time_submit");
+  const recordTimeField = document.getElementById("record_time_field");
+  const timeRecordForm = document.getElementById("time_record_form");
 
-  recordButton?.addEventListener("click", () => {
-    const taskName = document.querySelector("input[name='record[task_name]']")?.value || "";
-    const time = Math.floor(elapsed / 1000);
-    // 🌸 ここも currentFlowerId を使うように変更済み！
-    const url = currentFlowerId ? `/user_flowers/${currentFlowerId}/records` : "/records";
+  if (recordTimeSubmitButton && recordTimeField && timeRecordForm) {
+    recordTimeSubmitButton.addEventListener("click", (event) => {
+      event.preventDefault();
 
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content,
-      },
-      body: JSON.stringify({
-        record: { task_name: taskName },
-        time: time
+      const timeInSeconds = Math.floor(elapsed / 1000);
+      recordTimeField.value = timeInSeconds;
+
+      timeRecordForm.submit();
+    });
+  }
+
+  const flashDiv = document.getElementById("flower-message");
+  if (flashDiv) {
+    const flashMessage = flashDiv.dataset.flashMessage;
+    const flashImage = flashDiv.dataset.flashImage;
+    if (flashMessage) {
+      showMessage(flashMessage, flashImage);
+    }
+  }
+
+  // ToDo完了チェックボックスのイベントリスナー
+  document.querySelectorAll('input[type="checkbox"][data-remote="true"]').forEach(checkbox => {
+    checkbox.addEventListener('change', (event) => {
+      const url = event.target.dataset.url;
+      const method = event.target.dataset.method;
+
+      const formData = new FormData();
+      formData.append('record[completed]', event.target.checked ? 'true' : 'false');
+
+      fetch(url, {
+        method: method,
+        headers: {
+          'Accept': 'application/json',
+          'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").content
+        },
+        body: formData
       })
-    })
-      .then((response) => {
-        if (!response.ok) {
-          console.error("HTTPエラー:", response.status, response.statusText);
-          return response.text().then(text => { throw new Error(text); });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("🎉 レスポンスデータ:", data);
-
-        if (data.status === "success") {
-          const imageUrl = data.image;
-          showMessage(data.message, imageUrl);
-
-          // 🌸 ここを追加！ サーバーから新しいflower_idが返されたら更新する 🌸
-          if (data.new_flower_id) {
-            currentFlowerId = data.new_flower_id; // JavaScriptの変数 currentFlowerId を更新
-            // HTMLの data-flower-id 属性も更新して、次回ページ読み込み時に正しいIDが使われるようにする
-            const timerSection = document.getElementById("timer-section");
-            if (timerSection) {
-              timerSection.dataset.flowerId = data.new_flower_id;
-            }
-            console.log("🌸 新しい花のIDに切り替わりました:", currentFlowerId);
-          }
-
-        } else if (data.status === "short_time") {
-          const imageUrl = data.image;
-          showMessage(data.message, imageUrl);
+      .then(response => {
+        if (response.ok) {
+          return response.json();
         } else {
-          showMessage("⚠️ 記録に失敗しました: " + (data.message || "不明なエラー"));
+          console.error("HTTPエラー:", response.status, response.statusText);
+          return response.json()
+            .catch(() => response.text())
+            .then(errorBody => {
+              throw new Error(`Server Error (${response.status}): ${errorBody}`);
+            });
         }
       })
-      .catch((error) => {
-        console.error("fetchエラー:", error);
-        showMessage("⚠️ 通信エラーが発生しました。詳細: " + error.message);
+      .then(data => {
+        console.log("ToDo更新成功:", data);
+        const listItem = event.target.closest('li');
+        if (listItem) {
+          const taskNameSpan = listItem.querySelector('.task-name');
+          if (taskNameSpan) {
+            if (event.target.checked) {
+              taskNameSpan.classList.add('task-completed');
+            } else {
+              taskNameSpan.classList.remove('task-completed');
+            }
+          }
+        }
+      })
+      .catch(error => {
+        console.error("ToDo更新エラー:", error);
+        alert("ToDoの更新に失敗しました。");
+        if (error.message && error.message.startsWith("Server Error")) {
+            alert(`ToDoの更新に失敗しました。\n${error.message}`);
+        } else {
+            alert(`ToDoの更新に失敗しました。原因不明のエラーです。\n${error}`);
+        }
       });
+    });
   });
 });

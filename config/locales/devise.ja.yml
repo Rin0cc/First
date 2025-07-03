@@ -10,6 +10,8 @@ ja:
   errors:
     messages:
       not_saved: "%{resource} は保存できませんでした。"
+      blank: "を入力してください"
+      greater_than: "は%{count}より大きい値にしてください" 
     template:
       header:
         one: "%{count} 件のエラーが発生したため %{resource} は保存されませんでした。"
@@ -23,6 +25,23 @@ ja:
       user:
         one: "ユーザー"
         other: "ユーザー"
+      # ★ここから追記★
+      record: # Record モデルの日本語名
+        one: "記録"
+        other: "記録"
+    attributes:
+      record: # Record モデルの属性名
+        task_name: "作業内容"
+        time: "時間"
+    errors:
+      models:
+        record:
+          attributes:
+            task_name:
+              blank: "を入力してください" # Record の task_name が空の場合のメッセージ
+            time:
+              greater_than: "は0より大きい値にしてください" # Record の time が greater_than バリデーションに引っかかった場合のメッセージ
+      # ★ここまで追記★
 
   password_resets:
     new:

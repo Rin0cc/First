@@ -233,3 +233,266 @@ transition: opacity 0.4s ease, top 0.4s ease;
   color: #5a3d4a;
 }
 
+/* ========== ToDo機能関連 (付箋メモ風に修正) ========== */
+.todo-section {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 122, 32, 0.3);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%; /* .content と同じ幅 */
+  max-width: 800px; /* .content と同じ最大幅 */
+  margin: 20px auto; /* 中央寄せ */
+}
+
+.todo-form {
+  margin-bottom: 30px; /* フォームとリストの間にスペース */
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #ddd; /* 区切り線 */
+}
+
+.form-group {
+  margin-bottom: 15px; /* ラベルとインプットのグループ */
+}
+
+.form-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #555;
+  text-align: left; /* 左寄せに変更 */
+}
+
+.form-input {
+  width: calc(100% - 20px); /* 左右のpaddingを考慮 */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box; /* paddingを幅に含める */
+}
+
+.btn-add-todo {
+  background-color: #ff9d9d; /* ロゴの色に合わせる */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add-todo:hover {
+  background-color: #ff7f7f; /* ホバー時の色 */
+}
+
+/* ToDoリスト全体を付箋風に配置するためのコンテナ */
+.todo-list-container {
+  margin-top: 20px;
+  /* 付箋が並ぶようにFlexboxまたはGridを使用 */
+  display: flex; /* Flexboxに変更 */
+  flex-wrap: wrap; /* 折り返しを許可 */
+  gap: 20px; /* 付箋間の隙間 */
+  justify-content: center; /* 中央寄せ */
+  padding: 10px; /* コンテナ内の余白 */
+}
+
+.todo-list-container h3 {
+  color: #6b4c4c;
+  margin-bottom: 15px;
+  font-size: 1.5em;
+  width: 100%; /* タイトルが横幅いっぱいに広がるように */
+  text-align: center; /* タイトルを中央寄せ */
+}
+
+/* ul.todo-list は、直接のリストではなく、付箋を並べるためのコンテナとして使う */
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  /* border: 1px solid #e0e0e0; /* リスト全体の枠は削除 */
+  /* border-radius: 8px; */
+  /* overflow: hidden; */
+  display: contents; /* ul自体はレイアウトに影響させない */
+}
+
+/* 各ToDoアイテム（付箋メモ）のスタイル */
+.todo-list-item {
+  /* display: flex; */ /* Flexboxは内部で使うので削除 */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  padding: 15px; /* 付箋内の余白 */
+  width: 200px; /* 付箋の幅を固定 */
+  min-height: 120px; /* 付箋の最小高さを設定 */
+  background-color: #ffffff; /* 付箋の色 (薄いレモン色) */
+  border: 1px solid #b4e3a0; /* 付箋の枠線 */
+  border-radius: 5px; /* 角を少し丸く */
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* 影で浮き上がらせる */
+  position: relative; /* 子要素の配置用 */
+  transform: rotate(calc(var(--rotation) * 1deg)); /* ランダムな回転 */
+  margin: 0; /* gapで間隔を調整するのでmarginは0に */
+  display: flex; /* 内部要素をFlexboxで配置 */
+  flex-direction: column; /* 縦方向に並べる */
+  justify-content: space-between; /* 上下端に要素を配置 */
+}
+
+/* 付箋のランダムな回転のためのカスタムプロパティ */
+.todo-list-item:nth-child(odd) { --rotation: -2; } /* 奇数番目は少し左に回転 */
+.todo-list-item:nth-child(even) { --rotation: 2; } /* 偶数番目は少し右に回転 */
+.todo-list-item:nth-child(3n) { --rotation: 0; } /* 3の倍数番目は回転なし */
+/* もっとランダムにするならJavaScriptで設定することも可能 */
+
+
+.todo-item-content {
+  display: flex;
+  align-items: flex-start; /* チェックボックスとテキストの配置 */
+  flex-grow: 1; /* スペースを埋める */
+  text-align: left; /* 左寄せ */
+  margin-bottom: 10px; /* テキストとボタンの間のスペース */
+}
+
+.todo-checkbox {
+  margin-right: 10px;
+  flex-shrink: 0; /* チェックボックスが縮まないように */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.task-name {
+  font-size: 1em;
+  color: #333;
+  word-break: break-word; /* 長い単語がはみ出さないように */
+  line-height: 1.4;
+}
+
+.task-completed {
+  text-decoration: line-through;
+  color: #888;
+  font-style: italic;
+}
+
+.todo-actions {
+  display: flex;
+  justify-content: flex-end; /* ボタンを右寄せ */
+  width: 100%; /* 親要素の幅いっぱいに広げる */
+}
+
+.btn-edit-todo,
+.btn-delete-todo {
+  padding: 5px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.8em;
+  text-decoration: none;
+  margin-left: 5px; /* ボタン間の間隔 */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  white-space: nowrap; /* ボタン内のテキストが折り返さないように */
+}
+
+.btn-edit-todo {
+  background-color: #e0f2f7; /* 薄い水色 */
+  color: #007bff;
+  border: 1px solid #b3e0ed;
+}
+
+.btn-edit-todo:hover {
+  background-color: #ccecf4;
+}
+
+.btn-delete-todo {
+  background-color: #ffe0e6; /* 薄い赤 */
+  color: #dc3545;
+  border: 1px solid #ffb3c1;
+}
+
+.btn-delete-todo:hover {
+  background-color: #ffc2d1;
+}
+
+/* エラーメッセージのスタイル */
+.error-messages {
+  background-color: #f8d7da; /* 薄い赤の背景 */
+  color: #721c24; /* 濃い赤の文字 */
+  border: 1px solid #f5c6cb; /* 少し濃い赤のボーダー */
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  text-align: left; /* 左寄せ */
+}
+
+.error-messages h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  color: #721c24;
+}
+
+.error-messages ul {
+  list-style: none; /* リストのマークを削除 */
+  padding: 0;
+  margin: 0;
+}
+
+.error-messages li {
+  margin-bottom: 5px;
+}
+
+/* ストップウォッチのボタンのスタイル調整 */
+#timer-section .btn-start,
+#timer-section .btn-stop,
+#timer-section .btn-record {
+  padding: 10px 20px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+#timer-section .btn-start {
+  background-color: #b4e3a0; /* 開始ボタンの色 */
+  color: #333;
+}
+#timer-section .btn-start:hover {
+  background-color: #a1d38e;
+}
+
+#timer-section .btn-stop {
+  background-color: #f0ad4e; /* 停止ボタンの色 */
+  color: white;
+}
+#timer-section .btn-stop:hover {
+  background-color: #ec971f;
+}
+
+#timer-section .btn-record {
+  background-color: #ff9d9d; /* 記録ボタンの色 */
+  color: white;
+}
+#timer-section .btn-record:hover {
+  background-color: #ff7f7f;
+}
+
+/* タイマーボタンをまとめるdivのスタイル */
+.timer-controls {
+  margin-top: 20px;
+}
+
+/* hrタグのスタイルを調整 */
+hr {
+  border: 0;
+  border-top: 1px dashed #ccc;
+  margin: 40px auto;
+  width: 80%;
+}
+
+/* メディアクエリ：画面幅が狭い場合の調整 */
+@media (max-width: 600px) {
+  .todo-list-item {
+    width: calc(100% - 20px); /* 画面幅に合わせて調整 */
+  }
+}

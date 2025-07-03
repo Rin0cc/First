@@ -1,0 +1,13 @@
+<%= form_with model: record, url: records_path, data: { turbo_stream: true }, id: "new_record_form" do |f| %>
+  <%# エラー表示を、Turbo Streamで更新されるように id を追加 %>
+  <div id="record_errors">
+    <%# _error_messages.html.erb はコントローラー側でレンダリングされるのでここでは不要 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :task_name, "新しいToDo" %><br />
+    <%= f.text_field :task_name, data: { autofocus: true } %>
+  </div>
+
+  <%= f.submit "ToDoを追加" %>
+<% end %>

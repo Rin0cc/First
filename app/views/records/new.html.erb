@@ -16,40 +16,85 @@
     <% end %>
   <% else %>
     <p>記録をつけて、花を育ててみよう！</p>
+  <p>
   <% end %>
 </div>
 <br>
 
-<div id="timer-section" data-flower-id="<%= @user_flower.id %>">
-<div id="timer">00:00:00</div>
-<button id="start">開始</button>
-<button id="stop">停止</button>
-<button id="record">記録する</button>
+<%# === ストップウォッチ関連のフォーム（時間記録用）ここから === %>
+<%= form_with model: @record, url: records_path, data: { turbo: false }, id: "time_record_form" do |f| %>
+  <div id="timer-section" data-flower-id="<%= @user_flower.id %>">
+    <div id="timer">00:00:00</div>
+    <div class="timer-controls"> <%# ボタンをまとめるためのdivを追加 %>
+      <button type="button" id="start" class="btn-start">開始</button> <%# クラス名を変更 %>
+      <button type="button" id="stop" class="btn-stop">停止</button> <%# クラス名を変更 %>
+      <button type="submit" id="record_time_submit" class="btn-record">記録する</button> <%# クラス名を変更 %>
+    </div>
 
-<div id="seed-image" style="display: none;">
-<img src="<%= asset_path('Sprout.png') %>" alt="花の種" />
-</div>
+    <div id="seed-image" style="display: none;">
+      <img src="<%= asset_path('Sprout.png') %>" alt="花の種" />
+    </div>
+  </div>
 
-<div id="message" class="hidden"></div>
-<ul id="records"></ul>
-</div>
+  <%= f.hidden_field :time, id: "record_time_field" %>
+<% end %>
+<%# === ストップウォッチ関連のフォーム（時間記録用）ここまで === %>
 
 <div
-id="flower-message"
-data-flash-message="<%= j(flash[:notice] || flash[:alert]) %>"
-data-flash-image="<%= image_path(flash[:flower_image]) if flash[:flower_image].present? %>"
-**data-flowerseeds-url="<%= image_url('Flowerseeds.png') %>"
-data-sprout-url="<%= image_url('Sprout.png') %>"
-data-bud-url="<%= image_url('Bud.png') %>"
-data-fullbloom1-url="<%= image_url('FullBloom1.png') %>"
-data-fullbloom2-url="<%= image_url('FullBloom2.png') %>"
-data-thanks-url="<%= image_url('Thanks.png') %>"**
-class="message hidden">
+  id="flower-message"
+  data-flash-message="<%= j(flash[:notice] || flash[:alert]) %>"
+  data-flash-image="<%= image_path(flash[:flower_image]) if flash[:flower_image].present? %>"
+  data-flowerseeds-url="<%= image_url('Flowerseeds.png') %>"
+  data-sprout-url="<%= image_url('Sprout.png') %>"
+  data-bud-url="<%= image_url('Bud.png') %>"
+  data-fullbloom1-url="<%= image_url('FullBloom1.png') %>"
+  data-fullbloom2-url="<%= image_url('FullBloom2.png') %>"
+  data-thanks-url="<%= image_url('Thanks.png') %>"
+  class="message hidden">
 </div>
 
-<%= form_with model: @record, url: records_path, data: { turbo: false } do |f| %>
-<!-- <%= f.label :task_name, "作業内容" %>
-<%= f.text_field :task_name %>-->
-<%= hidden_field_tag :time, 0, id: "timer_seconds" %>
-<%= f.hidden_field :time, id: "record_time" %>
-<% end %>
+<hr>
+
+<h2>ToDoリスト</h2>
+
+<%# === ToDoタスク追加用のフォーム ここから === %>
+<div class="todo-section">
+  <%= form_with model: @record, url: records_path, data: { turbo_stream: true }, id: "new_record_form", class: "todo-form" do |f| %>
+    <%# エラー表示はフォームのすぐ下に出るように移動。record_errors idは残す %>
+    <div id="record_errors">
+      <% if @record.errors.any? %>
+        <div class="error-messages"> <%# クラス名を変更 %>
+          <h4><%= pluralize(@record.errors.count, "エラー") %>:</h4>
+          <ul>
+            <% @record.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="field form-group"> <%# form-groupクラスを追加 %>
+      <%= f.label :task_name, "新しいToDoを追加", class: "form-label" %><br />
+      <%= f.text_field :task_name, data: { autofocus: true }, class: "form-input", placeholder: "例: レポート作成、部屋の掃除" %> <%# クラス名を変更 %>
+    </div>
+
+    <%= f.submit "ToDoを追加", class: "btn-add-todo" %> <%# クラス名を変更 %>
+  <% end %>
+
+  <%# === ToDoリスト表示部分 ここから === %>
+  <div class="todo-list-container"> <%# クラス名を変更（mt-4を削除） %>
+    <h3>未完了のToDo</h3>
+    <%# 未完了のToDoリストの ul に id を追加 %>
+    <ul id="todo_items" class="todo-list"> <%# クラス名を変更 %>
+      <%= render partial: 'record', collection: @records %>
+    </ul>
+
+    <%# 完了済みToDoの表示切り替えボタン（オプション） %>
+    <%# <button id="toggle_completed_todos" class="btn-toggle-completed">完了済みToDoを表示/非表示</button> %>
+    <%# <ul id="completed_todo_items" class="todo-list completed-list" style="display: none;"> %>
+    <%#   <%# <%= render partial: 'record', collection: @completed_records %> 
+    <%# </ul> %>
+  </div>
+  <%# === ToDoリスト表示部分 ここまで === %>
+</div>

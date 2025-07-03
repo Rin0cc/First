@@ -1,0 +1,20 @@
+<li id="<%= dom_id(record) %>" class="todo-list-item"> <%# idとクラス名を追加（付箋用） %>
+  <div class="todo-item-content">
+    <%= check_box_tag "record_#{record.id}", record.id, record.completed,
+      data: {
+        remote: true,
+        url: record_path(record),
+        method: :patch,
+        params: { record: { completed: !record.completed } }.to_json
+      },
+      class: "todo-checkbox" %> <%# ここを修正しました。余分な %> 
+    <span class="task-name <%= 'task-completed' if record.completed %>"> <%# 完了済みのクラス名（付箋用） %>
+      <%= record.task_name %>
+    </span>
+  </div>
+
+  <div class="todo-actions">
+    <%# 直接編集機能（JavaScriptで実装）を後で追加することも可能 %> 
+    <%= link_to "削除", record_path(record), data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" }, class: "btn-delete-todo" %> <%# 付箋用のクラス名 %>
+  </div>
+</li>
