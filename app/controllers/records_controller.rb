@@ -63,6 +63,10 @@ class RecordsController < ApplicationController
   def edit
   end
 
+  def show
+    @record = Record.find(params[:id]) # ここで特定のレコードを取得するよ
+  end
+  
   def index
     redirect_to new_record_path
   end

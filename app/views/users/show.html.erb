@@ -1,7 +1,26 @@
+<% set_meta_tags title: "#{current_user.username.presence || 'ユーザー'}さんのマイページ | ぶるーみんぐれこーど",
+                  description: "#{current_user.username.presence || 'ユーザー'}さんの記録状況を見てみよう！ぶるーみんぐれこーどで日々の成長を可視化。",
+                  og: {
+                    image: asset_url('logo2.png') 
+                  },
+                  twitter: {
+                    card: 'summary_large_image',
+                    site: '@あなたのXアカウント名' # 例: @bloomingrecord_jp
+                  } %>
+
 <h1>マイページ</h1>
 <ul>
   <li><%= link_to "✏️プロフィールを編集", edit_user_registration_path %></li>
   <li><%= link_to "📚記録する", new_record_path %></li>
   <li><%= link_to "🏆ランキング", ranking_users_path %></li> 
+  <li>
+    <% current_user_total_hours = current_user.total_record_duration_hours %>
+    <%= link_to "✨Xで記録をシェアする", 
+            "https://twitter.com/intent/tweet?text=#{CGI.escape("ぶるーみんぐれこーどで合計#{current_user_total_hours}時間記録したよ！")}&url=#{CGI.escape(root_url)}", 
+            target: "_blank", 
+            rel: "nofollow noopener",
+            class: "btn btn-twitter-share"
+            %>
+  </li>
   <li><%= link_to "🚪ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %></li>
 </ul>

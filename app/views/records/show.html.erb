@@ -1,0 +1,30 @@
+
+<% set_meta_tags title: "#{@record.task_name}の記録 | ぶるーみんぐれこーど",
+                  description: "私が「#{@record.task_name}」を#{@record.time}分記録しました！あなたの記録も育ててみよう。",
+                  og: {
+                    image: asset_url('logo2.png') # このレコード専用の画像があれば
+                  },
+                  twitter: {
+                    card: 'summary_large_image', # Twitter Cardsもここで設定すると良いね
+                    site: '@あなたのXアカウント名' # 例: @bloomingrecord_jp
+                  } %>
+
+<h1>記録詳細</h1>
+
+<p>タスク名: <%= @record.task_name %></p>
+<p>記録時間: <%= @record.time %>分</p>
+<p>完了済み: <%= @record.completed ? "はい" : "いいえ" %></p>
+<p>記録日: <%= l @record.created_at.to_date %></p> <%# 日付をローカライズして表示 %>
+
+<hr>
+
+<h3>この記録をXでシェアしよう！</h3>
+<% record_duration_hours = (@record.time / 60.0).round(1) %>
+
+<%= link_to "Xでシェアする", 
+            "https://twitter.com/intent/tweet?text=#{CGI.escape("ぶるーみんぐれこーどで#{record_duration_hours}時間記録したよ！")}&url=#{CGI.escape(record_url(@record))}", # ハッシュタグはなしにしたバージョン
+            target: "_blank", 
+            rel: "nofollow noopener" %>
+
+<br>
+<%= link_to "記録一覧へ戻る", records_path %>
