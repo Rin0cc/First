@@ -1,6 +1,6 @@
 <h1>マイページ</h1>
 <ul>
-  <li><%= link_to "プロフィール編集/メールアドレス変更/パスワード変更/退会", edit_user_registration_path %></li>
-  <li><%= link_to "記録", new_record_path %></li>
-  <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+  <li><%= link_to "プロフィールを編集", edit_user_registration_path %></li>
+  <li><%= link_to "記録する", new_record_path %></li>
+  <li><%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %></li>
 </ul>
