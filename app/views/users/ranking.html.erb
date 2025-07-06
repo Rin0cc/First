@@ -1,0 +1,14 @@
+<h1>ユーザーランキング🏆</h1>
+<p>合計記録時間（経過時間）のランキングだよ！</p>
+
+<ol>
+  <% @ranked_users.each.with_index(1) do |user, index| %>
+    <li>
+      <%= index %>位: 
+      <%= user.username.presence || "名無しフラワーさん🌼" %> - 
+      合計記録時間: <%= user.total_record_duration_hours %>時間
+    </li>
+  <% end %>
+</ol>
+
+<%= link_to "マイページに戻る", user_path(current_user) %>
