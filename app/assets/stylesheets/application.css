@@ -5,494 +5,634 @@
 
 /* ========== 共通設定 ========== */
 body {
-background-color: white;
-background-image: linear-gradient(351deg, rgba(191, 214, 255, 1), rgba(255, 198, 206, 1));
-margin: 0;
-font-family: sans-serif;
-text-align: center;
+    background-color: white;
+    background-image: linear-gradient(351deg, rgba(191, 214, 255, 1), rgba(255, 198, 206, 1));
+    margin: 0;
+    font-family: sans-serif;
+    text-align: center;
 }
 
 /* ========== ヘッダー ========== */
 .header {
-background-color: rgba(255, 231, 231, 0.913);
-backdrop-filter: blur(3px);
-padding: 1rem;
-border-bottom: 1px solid rgba(0, 122, 32, 0.3);
+    background-color: rgba(255, 231, 231, 0.913);
+    backdrop-filter: blur(3px);
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0, 122, 32, 0.3);
 }
 
 .header-inner {
-display: flex;
-justify-content: space-between;
-align-items: flex-start;
-max-width: 1000px;
-margin: -19px auto;
+    display: flex;
+    justify-content: space-between; /* 修正: ロゴは左、メニューエリアは右 */
+    align-items: center;
+    max-width: 1000px;
+    margin: -19px auto;
+    padding: 0 15px;
 }
 
 .logo a {
-text-decoration: none;
-color: #ff9d9d;
-align-items: center;
-font-size: 1.5rem;
-font-weight: bold;
+    text-decoration: none;
+    color: #ff9d9d;
+    /* align-items: center; は親要素のalign-itemsで制御されるので不要 */
+    font-size: 1.5rem;
+    font-weight: bold;
+    flex-shrink: 0; /* ロゴが縮まないように */
 }
 
 /* ========== メニュー ========== */
 .menu-toggle {
-font-size: 1.5rem;
-background: none;
-border: none;
-cursor: pointer;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001; /* メニューより手前に表示 */
+    display: block; /* 修正: 常に表示 */
+    padding: 5px; /* クリックしやすいように */
+    /* margin-left: auto; はheader-innerのjustify-contentで制御されるので不要 */
 }
 
 .nav-menu {
-display: none;
-position: absolute;
-top: 60px;
-right: 1rem;
-background-color: white;
-box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-border-radius: 6px;
-padding: 0.5rem 1rem;
-z-index: 1000;
+    display: none; /* 修正: デフォルトで非表示 (JavaScriptで開閉) */
+    position: absolute; /* ハンバーガーメニューで開閉するため */
+    top: 60px; /* ヘッダーの高さに合わせて調整 */
+    right: 1rem; /* 右端からの位置 */
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    min-width: 150px; /* メニューの最小幅を設定 */
+    /* スムーズなアニメーションを追加したい場合は以下を有効に */
+    /* transition: opacity 0.3s ease, transform 0.3s ease; */
+    /* transform: translateY(-10px); */
+    /* opacity: 0; */
+    /* pointer-events: none; */
 }
 
 .nav-menu.active {
-display: block;
+    display: block; /* JavaScriptでアクティブになったら表示 */
+    /* transform: translateY(0); */
+    /* opacity: 1; */
+    /* pointer-events: auto; */
 }
 
 .nav-menu ul {
-list-style: none;
-padding: 0;
-margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* メニュー項目は縦並びなのでdisplay: flex; は不要 */
 }
 
 .nav-menu li {
-margin: 0.5rem 0;
+    margin: 0.5rem 0;
+    text-align: left; /* メニュー項目を左寄せ */
 }
 
 .nav-menu a {
-text-decoration: none;
-color: #333;
+    text-decoration: none;
+    color: #333;
+    display: block; /* クリック領域を広げる */
+    padding: 0.2rem 0;
 }
 
 /* ========== コンテンツ ========== */
 .container {
-display: flex;
-justify-content: center;
-margin-top: 5%;
-padding-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+    padding-bottom: 2rem;
+    padding-left: 15px; /* 左右に少し余白を追加 */
+    padding-right: 15px; /* 左右に少し余白を追加 */
 }
 
 .content {
-background-color: #ffffff;
-border: 1px solid rgba(0, 122, 32, 0.3);
-padding: 2rem;
-border-radius: 8px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-width: 90%;
-max-width: 800px;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 122, 32, 0.3);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    box-sizing: border-box; /* paddingを幅に含める */
 }
 
 /* ========== タイマー ========== */
 #timer {
-font-size: 3em;
-margin-bottom: 20px;
+    font-size: 3em;
+    margin-bottom: 20px;
 }
 
 button {
-font-size: 1.2em;
-padding: 10px 20px;
-margin: 5px;
-cursor: pointer;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
 }
 
 /* ========== メッセージ表示 ========== */
 .hidden {
-display:  none;
+    display: none;
 }
 
-/* ✨ ここを修正！IDを #flower-message に変更しました ✨ */
-#flower-message img { /* ←ここです！ */
-display: block;
-margin: 10px auto 0;
-max-width: 150px;
+#flower-message img {
+    display: block;
+    margin: 10px auto 0;
+    max-width: 150px;
+    height: auto; /* 縦横比を保つ */
 }
 
 /* ========== トップページ ========== */
 .top-page {
-min-height: 100vh;
-display: flex;
-align-items: center;
-justify-content: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px; /* 全体に余白 */
+    box-sizing: border-box;
 }
 
 .top-content {
-background-color: #fff;
-border-radius: 10px;
-padding: 2rem;
-text-align: center;
-max-width: 600px;
-width: 100%;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .logo {
-font-size: 2rem;
-color: #ff9d9d;
-margin-bottom: 1rem;
+    font-size: 2rem;
+    color: #ff9d9d;
+    margin-bottom: 1rem;
 }
 
 .catchphrase {
-font-size: 1.1rem;
-line-height: 1.6;
-margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
 }
 
 .top-image {
-max-width: 100%;
-height: auto;
-border-radius: 8px;
-margin-bottom: 1.5rem;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
 }
 
 .start-button {
-display: inline-block;
-background-color: #b4e3a0;
-color: #333;
-padding: 0.8rem 1.6rem;
-border-radius: 6px;
-text-decoration: none;
-margin-bottom: 1.5rem;
-font-weight: bold;
-transition: background-color 0.3s;
+    display: inline-block;
+    background-color: #b4e3a0;
+    color: #333;
+    padding: 0.8rem 1.6rem;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
 .start-button:hover {
-background-color: #a1d38e;
+    background-color: #a1d38e;
 }
 
 .description {
-font-size: 1rem;
-line-height: 1.6;
-color: #555;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
 }
+
 #seed-image img {
-  width: 100px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+    width: 100px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
+
 #flower-message {
-position: fixed;
-top: 20px;
-left: 50%;
-transform: translateX(-50%);
-background-color: rgba(255, 255, 255, 0.95);
-border: 2px solid #a1d8af;
-padding: 12px 20px;
-border-radius: 10px;
-font-size: 1.2em;
-opacity: 0;
-z-index: 9999;
-transition: opacity 0.4s ease, top 0.4s ease;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 2px solid #a1d8af;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    opacity: 0;
+    z-index: 9999;
+    transition: opacity 0.4s ease, top 0.4s ease;
+    max-width: 90%;
+    box-sizing: border-box;
 }
 
 #flower-message.show {
-  opacity: 1;
-  top: 40px;
-  display: block;
+    opacity: 1;
+    top: 40px;
+    display: block;
 }
+
 .record-description {
-  color: #6b4c4c;
-  background: #fff5f5;
-  padding: 1em;
-  border: 1px solid #fcd5ce;
-  border-radius: 1em;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
+    color: #6b4c4c;
+    background: #fff5f5;
+    padding: 1em;
+    border: 1px solid #fcd5ce;
+    border-radius: 1em;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
 }
 
 .record-description p {
-  margin: 0.5rem 0; /* 段落の上下の余白 */
-  color: #555; /* テキストの色を少し濃くして読みやすく */
-  line-height: 1.6; /* 行の高さを調整して読みやすく */
+    margin: 0.5rem 0;
+    color: #555;
+    line-height: 1.6;
 }
 
 .record-description strong {
-  color: #ff69b4; /* 「花を咲かせよう！」の文字を濃いピンクに */
-  font-size: 1.1em; /* 少し文字を大きく */
+    color: #ff69b4;
+    font-size: 1.1em;
 }
 
 .record-time {
- background: #fff8f0; /* ほんのりピンクベージュの優しい背景 */
-  border: 2px solid #ffc0cb; /* 薄いピンクの枠線 */
-  border-radius: 12px;
-  padding: 1.5em 2em;
-  max-width: 480px;
-  margin: 1em auto;
-  box-shadow: 0 6px 12px rgba(255, 192, 203, 0.3);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #5a3d4a;
+    background: #fff8f0;
+    border: 2px solid #ffc0cb;
+    border-radius: 12px;
+    padding: 1.5em 2em;
+    max-width: 480px;
+    margin: 1em auto;
+    box-shadow: 0 6px 12px rgba(255, 192, 203, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #5a3d4a;
+    box-sizing: border-box;
 }
 
 /* ========== ToDo機能関連 (付箋メモ風に修正) ========== */
 .todo-section {
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 122, 32, 0.3);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%; /* .content と同じ幅 */
-  max-width: 800px; /* .content と同じ最大幅 */
-  margin: 20px auto; /* 中央寄せ */
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 122, 32, 0.3);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    box-sizing: border-box;
 }
 
 .todo-form {
-  margin-bottom: 30px; /* フォームとリストの間にスペース */
-  padding-bottom: 20px;
-  border-bottom: 1px dashed #ddd; /* 区切り線 */
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #ddd;
 }
 
 .form-group {
-  margin-bottom: 15px; /* ラベルとインプットのグループ */
+    margin-bottom: 15px;
 }
 
 .form-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
-  color: #555;
-  text-align: left; /* 左寄せに変更 */
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #555;
+    text-align: left;
 }
 
 .form-input {
-  width: calc(100% - 20px); /* 左右のpaddingを考慮 */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1em;
-  box-sizing: border-box; /* paddingを幅に含める */
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
 }
 
 .btn-add-todo {
-  background-color: #ff9d9d; /* ロゴの色に合わせる */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1.1em;
-  margin-top: 10px;
-  transition: background-color 0.3s ease;
+    background-color: #ff9d9d;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
 .btn-add-todo:hover {
-  background-color: #ff7f7f; /* ホバー時の色 */
+    background-color: #ff7f7f;
 }
 
-/* ToDoリスト全体を付箋風に配置するためのコンテナ */
 .todo-list-container {
-  margin-top: 20px;
-  /* 付箋が並ぶようにFlexboxまたはGridを使用 */
-  display: flex; /* Flexboxに変更 */
-  flex-wrap: wrap; /* 折り返しを許可 */
-  gap: 20px; /* 付箋間の隙間 */
-  justify-content: center; /* 中央寄せ */
-  padding: 10px; /* コンテナ内の余白 */
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 10px;
 }
 
 .todo-list-container h3 {
-  color: #6b4c4c;
-  margin-bottom: 15px;
-  font-size: 1.5em;
-  width: 100%; /* タイトルが横幅いっぱいに広がるように */
-  text-align: center; /* タイトルを中央寄せ */
+    color: #6b4c4c;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    width: 100%;
+    text-align: center;
 }
 
-/* ul.todo-list は、直接のリストではなく、付箋を並べるためのコンテナとして使う */
 .todo-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  /* border: 1px solid #e0e0e0; /* リスト全体の枠は削除 */
-  /* border-radius: 8px; */
-  /* overflow: hidden; */
-  display: contents; /* ul自体はレイアウトに影響させない */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: contents;
 }
 
-/* 各ToDoアイテム（付箋メモ）のスタイル */
 .todo-list-item {
-  /* display: flex; */ /* Flexboxは内部で使うので削除 */
-  /* justify-content: space-between; */
-  /* align-items: center; */
-  padding: 15px; /* 付箋内の余白 */
-  width: 200px; /* 付箋の幅を固定 */
-  min-height: 120px; /* 付箋の最小高さを設定 */
-  background-color: #ffffff; /* 付箋の色 (薄いレモン色) */
-  border: 1px solid #b4e3a0; /* 付箋の枠線 */
-  border-radius: 5px; /* 角を少し丸く */
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); /* 影で浮き上がらせる */
-  position: relative; /* 子要素の配置用 */
-  transform: rotate(calc(var(--rotation) * 1deg)); /* ランダムな回転 */
-  margin: 0; /* gapで間隔を調整するのでmarginは0に */
-  display: flex; /* 内部要素をFlexboxで配置 */
-  flex-direction: column; /* 縦方向に並べる */
-  justify-content: space-between; /* 上下端に要素を配置 */
+    padding: 15px;
+    width: 200px;
+    min-height: 120px;
+    background-color: #ffffff;
+    border: 1px solid #b4e3a0;
+    border-radius: 5px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transform: rotate(calc(var(--rotation) * 1deg));
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
 }
 
-/* 付箋のランダムな回転のためのカスタムプロパティ */
-.todo-list-item:nth-child(odd) { --rotation: -2; } /* 奇数番目は少し左に回転 */
-.todo-list-item:nth-child(even) { --rotation: 2; } /* 偶数番目は少し右に回転 */
-.todo-list-item:nth-child(3n) { --rotation: 0; } /* 3の倍数番目は回転なし */
-/* もっとランダムにするならJavaScriptで設定することも可能 */
-
+.todo-list-item:nth-child(odd) { --rotation: -2; }
+.todo-list-item:nth-child(even) { --rotation: 2; }
+.todo-list-item:nth-child(3n) { --rotation: 0; }
 
 .todo-item-content {
-  display: flex;
-  align-items: flex-start; /* チェックボックスとテキストの配置 */
-  flex-grow: 1; /* スペースを埋める */
-  text-align: left; /* 左寄せ */
-  margin-bottom: 10px; /* テキストとボタンの間のスペース */
+    display: flex;
+    align-items: flex-start;
+    flex-grow: 1;
+    text-align: left;
+    margin-bottom: 10px;
 }
 
 .todo-checkbox {
-  margin-right: 10px;
-  flex-shrink: 0; /* チェックボックスが縮まないように */
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
+    margin-right: 10px;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
 }
 
 .task-name {
-  font-size: 1em;
-  color: #333;
-  word-break: break-word; /* 長い単語がはみ出さないように */
-  line-height: 1.4;
+    font-size: 1em;
+    color: #333;
+    word-break: break-word;
+    line-height: 1.4;
 }
 
 .task-completed {
-  text-decoration: line-through;
-  color: #888;
-  font-style: italic;
+    text-decoration: line-through;
+    color: #888;
+    font-style: italic;
 }
 
 .todo-actions {
-  display: flex;
-  justify-content: flex-end; /* ボタンを右寄せ */
-  width: 100%; /* 親要素の幅いっぱいに広げる */
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .btn-edit-todo,
 .btn-delete-todo {
-  padding: 5px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 0.8em;
-  text-decoration: none;
-  margin-left: 5px; /* ボタン間の間隔 */
-  transition: background-color 0.3s ease, color 0.3s ease;
-  white-space: nowrap; /* ボタン内のテキストが折り返さないように */
+    padding: 5px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8em;
+    text-decoration: none;
+    margin-left: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    white-space: nowrap;
 }
 
 .btn-edit-todo {
-  background-color: #e0f2f7; /* 薄い水色 */
-  color: #007bff;
-  border: 1px solid #b3e0ed;
+    background-color: #e0f2f7;
+    color: #007bff;
+    border: 1px solid #b3e0ed;
 }
 
 .btn-edit-todo:hover {
-  background-color: #ccecf4;
+    background-color: #ccecf4;
 }
 
 .btn-delete-todo {
-  background-color: #ffe0e6; /* 薄い赤 */
-  color: #dc3545;
-  border: 1px solid #ffb3c1;
+    background-color: #ffe0e6;
+    color: #dc3545;
+    border: 1px solid #ffb3c1;
 }
 
 .btn-delete-todo:hover {
-  background-color: #ffc2d1;
+    background-color: #ffc2d1;
 }
 
 /* エラーメッセージのスタイル */
 .error-messages {
-  background-color: #f8d7da; /* 薄い赤の背景 */
-  color: #721c24; /* 濃い赤の文字 */
-  border: 1px solid #f5c6cb; /* 少し濃い赤のボーダー */
-  border-radius: 5px;
-  padding: 10px 15px;
-  margin-bottom: 20px;
-  text-align: left; /* 左寄せ */
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    text-align: left;
+    box-sizing: border-box;
 }
 
 .error-messages h4 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 1.1em;
-  color: #721c24;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #721c24;
 }
 
 .error-messages ul {
-  list-style: none; /* リストのマークを削除 */
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .error-messages li {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 /* ストップウォッチのボタンのスタイル調整 */
 #timer-section .btn-start,
 #timer-section .btn-stop,
 #timer-section .btn-record {
-  padding: 10px 20px;
-  font-size: 1.2em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 5px;
-  transition: background-color 0.3s ease;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s ease;
 }
 
 #timer-section .btn-start {
-  background-color: #b4e3a0; /* 開始ボタンの色 */
-  color: #333;
+    background-color: #b4e3a0;
+    color: #333;
 }
 #timer-section .btn-start:hover {
-  background-color: #a1d38e;
+    background-color: #a1d38e;
 }
 
 #timer-section .btn-stop {
-  background-color: #f0ad4e; /* 停止ボタンの色 */
-  color: white;
+    background-color: #f0ad4e;
+    color: white;
 }
 #timer-section .btn-stop:hover {
-  background-color: #ec971f;
+    background-color: #ec971f;
 }
 
 #timer-section .btn-record {
-  background-color: #ff9d9d; /* 記録ボタンの色 */
-  color: white;
+    background-color: #ff9d9d;
+    color: white;
 }
 #timer-section .btn-record:hover {
-  background-color: #ff7f7f;
+    background-color: #ff7f7f;
 }
 
 /* タイマーボタンをまとめるdivのスタイル */
 .timer-controls {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 /* hrタグのスタイルを調整 */
 hr {
-  border: 0;
-  border-top: 1px dashed #ccc;
-  margin: 40px auto;
-  width: 80%;
+    border: 0;
+    border-top: 1px dashed #ccc;
+    margin: 40px auto;
+    width: 80%;
 }
 
-/* メディアクエリ：画面幅が狭い場合の調整 */
-@media (max-width: 600px) {
-  .todo-list-item {
-    width: calc(100% - 20px); /* 画面幅に合わせて調整 */
-  }
+/* ========== レスポンシブ対応 ========== */
+
+/* 画面幅が768px以下のデバイス（タブレット、スマホ横向きなど） */
+@media (max-width: 768px) {
+    /* ヘッダーの調整 */
+    .header-inner {
+        /* ロゴとメニューボタンが横並びになるように、これらの設定は維持 */
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
+        padding-top: 10px;
+    }
+
+    .logo {
+        margin-bottom: 0; /* ロゴの下の余白をなくす */
+        font-size: 1.3rem; /* 少し小さく */
+    }
+
+    /* ハンバーガーメニューボタンはデフォルトで表示されているため、ここでは特別な設定は不要 */
+
+    /* ナビゲーションメニューの調整 (モバイルで開いた時の見た目) */
+    .nav-menu {
+        top: 70px; /* ヘッダーの高さに合わせて調整 */
+        right: 0; /* 右端にぴったりつける */
+        left: auto; /* left: 0; を解除 */
+        width: 100%; /* 全幅に広げる */
+        border-radius: 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 影は残す */
+        background-color: rgba(255, 231, 231, 0.95); /* 背景色をモバイル用に */
+        border-bottom: 1px solid rgba(0, 122, 32, 0.3);
+        padding: 0.5rem 1rem; /* パディングもモバイル用に */
+        min-width: auto; /* 最小幅を解除 */
+    }
+
+    .nav-menu ul {
+        /* メニュー項目は縦並びなのでdisplay: flex; は不要 */
+        align-items: flex-start; /* 左寄せ */
+        width: auto;
+        padding: 10px 0;
+    }
+
+    .nav-menu li {
+        width: 100%; /* リストアイテムも全幅 */
+        text-align: center; /* テキスト中央寄せ */
+        margin: 0.3rem 0;
+    }
+
+    .content, .todo-section, .top-content, .record-description, .record-time, .error-messages {
+        padding: 1rem;
+    }
+
+    #timer {
+        font-size: 2.5em;
+    }
+
+    button,
+    #timer-section .btn-start,
+    #timer-section .btn-stop,
+    #timer-section .btn-record {
+        font-size: 1.1em;
+        padding: 8px 15px;
+    }
+
+    .todo-list-item {
+        width: calc(50% - 25px);
+    }
+}
+
+@media (max-width: 480px) {
+    .logo a {
+        font-size: 1.2rem;
+    }
+
+    #timer {
+        font-size: 2em;
+    }
+
+    button,
+    #timer-section .btn-start,
+    #timer-section .btn-stop,
+    #timer-section .btn-record {
+        font-size: 1em;
+        padding: 6px 12px;
+        margin: 3px;
+    }
+    .todo-list-item {
+        width: calc(100% - 30px);
+    }
+
+    /* 入力フォームの調整 */
+    .form-input {
+        font-size: 0.95em;
+        padding: 8px;
+    }
+
+    /* エラーメッセージのフォントサイズ調整 */
+    .error-messages {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+
+    /* flower-messageの位置調整 */
+    #flower-message {
+        top: 10px;
+        padding: 8px 15px;
+        font-size: 1em;
+        max-width: 95%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .header-inner {
+        max-width: 1200px; 
+    }
+
+    .content, .todo-section {
+        max-width: 900px; 
+    }
+
+    .todo-list-item {
+        width: 250px; 
+        min-height: 140px;
+    }
 }
