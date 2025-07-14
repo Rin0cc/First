@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   def days_since_first_record
     first_date = first_record_date
-    return 0 unless first_date 
+    return 0 unless first_date
     (Date.current - first_date).to_i + 1
   end
 

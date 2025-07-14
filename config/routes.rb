@@ -11,12 +11,12 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
-      get 'ranking' 
+      get "ranking"
     end
   end
 
   # ToDo機能と時間記録のためのルーティング
-  resources :records, only: [ :new, :create, :update, :destroy, :index , :show] 
+  resources :records, only: [ :new, :create, :update, :destroy, :index, :show ]
 
 
   # 開発環境専用のメール確認

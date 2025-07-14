@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   def ranking
     @ranked_users = User.all.sort_by(&:total_record_duration_hours).reverse
   end
-  
+
   private
     def user_params
       params.require(:user).permit(:name, :email, :password)

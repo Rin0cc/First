@@ -33,7 +33,7 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # ここをコメントアウト解除し、あなたのアプリの実際のURLに置き換えてください！
-  config.action_controller.asset_host = 'https://bloomingrecord.com' 
+  config.action_controller.asset_host = "https://bloomingrecord.com"
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
@@ -106,7 +106,7 @@ Rails.application.configure do
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   # ホストの許可設定（Host Authorization）
-  config.hosts << 'bloomingrecord.com'         # 独自ドメイン
-  config.hosts << 'www.bloomingrecord.com'     # 独自ドメインのwwwサブドメイン
-  config.hosts << 'blooming-record.onrender.com' # RenderのデフォルトURL
+  config.hosts << "bloomingrecord.com"         # 独自ドメイン
+  config.hosts << "www.bloomingrecord.com"     # 独自ドメインのwwwサブドメイン
+  config.hosts << "blooming-record.onrender.com" # RenderのデフォルトURL
 end
