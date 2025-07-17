@@ -636,3 +636,30 @@ hr {
         min-height: 140px;
     }
 }
+/* イベント全体の背景色とテキスト色 */
+.fc-event {
+  background-color: #fcffd8; 
+  border-color: #A0C0E0;
+  color: #444444; 
+  font-weight: bold;
+}
+
+/* イベントにマウスをホバーした時の色 */
+.fc-event:hover {
+  opacity: 0.8;
+}
+
+/* カレンダーのヘッダーの色 */
+.fc .fc-toolbar-title {
+  color: #a1d8af; 
+}
+
+/* カレンダーの曜日名の文字色 */
+.fc .fc-col-header-cell-cushion {
+  color: #1f0025; 
+}
+
+/* 今日の日付の背景色 */
+.fc .fc-day-today {
+  background-color: #ffdcf6; 
+}

@@ -95,7 +95,7 @@ class RecordsController < ApplicationController
         start: start_time.iso8601,
         end: end_time.iso8601,
         allDay: false,
-        id: record.id
+        id: record.id,
       }
     end.to_json.html_safe
   end
