@@ -1,5 +1,6 @@
 import "@hotwired/turbo-rails";
 import "./controllers";
+import "./analytics"
 
 // showMessage 関数はそのまま
 function showMessage(text, imageUrl = null) {

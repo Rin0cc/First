@@ -1,0 +1,20 @@
+
+<h1>🗓️カレンダー/📈グラフ</h1>
+<div id="calendar" style="max-width: 900px; margin: 40px auto;"></div>
+
+<%# Railsコントローラーから渡されたデータをJavaScript変数として埋め込む %>
+<script>
+
+  (() => {
+    window.chartData = <%= @chart_data %>; 
+    window.calendarEvents = <%= @calendar_events %>; 
+  })();
+</script>
+
+<h2>日別記録時間グラフ</h2>
+<div style="width: 800px; margin: auto;">
+  <canvas id="dailyTimeChart"></canvas>
+</div>
+
+<% link_to"戻る", records_path, class: "btn btn-secondary" %>
+

@@ -64,11 +64,40 @@ class RecordsController < ApplicationController
   end
 
   def show
-    @record = Record.find(params[:id]) # ここで特定のレコードを取得するよ
+    @record = Record.find(params[:id])
   end
 
   def index
     redirect_to new_record_path
+  end
+
+  def analytics
+    # Chart.js 用のデータ準備 (日ごとの合計記録時間)
+    user_records = current_user.records.where.not(time: nil)
+
+    daily_total_times = user_records.group("DATE(created_at)").sum(:time)
+
+    @chart_data = daily_total_times.map do |date, total_seconds|
+      {
+        date: date.to_s,
+        totalDurationMinutes: (total_seconds / 60.0).round(1)
+      }
+    end.to_json.html_safe
+
+    # FullCalendar.io 用のデータ準備 (個々の記録をイベントとして)
+    @calendar_events = user_records.map do |record|
+      start_time = record.created_at
+      # 記録終了日時 (開始日時 + 記録時間)
+      end_time = start_time + record.time.seconds
+
+      {
+        title: "#{record.task_name.presence || '記録'} (#{record.time / 60}分)",
+        start: start_time.iso8601,
+        end: end_time.iso8601,
+        allDay: false,
+        id: record.id
+      }
+    end.to_json.html_safe
   end
 
   def update
@@ -140,7 +169,6 @@ class RecordsController < ApplicationController
   end
 
   def record_params
-    # ユーザーちゃんのコードで正しいです！
     params.require(:record).permit(:task_name, :completed, :time, :user_flower_id, :completed)
   end
 

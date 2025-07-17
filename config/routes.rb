@@ -15,9 +15,11 @@ Rails.application.routes.draw do
     end
   end
 
-  # ToDo機能と時間記録のためのルーティング
-  resources :records, only: [ :new, :create, :update, :destroy, :index, :show ]
-
+  resources :records, only: [ :new, :create, :update, :destroy, :index, :show ] do
+    collection do
+      get "analytics"
+  end
+end
 
   # 開発環境専用のメール確認
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
