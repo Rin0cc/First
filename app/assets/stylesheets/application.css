@@ -221,3 +221,8 @@ transition: opacity 0.4s ease, top 0.4s ease;
   color: #ff69b4; /* 「花を咲かせよう！」の文字を濃いピンクに */
   font-size: 1.1em; /* 少し文字を大きく */
 }
+.howtouse {
+  max-width: 110%; /* 親要素の幅を超えないようにする */
+  height: auto;    /* 縦横比を保って自動調整 */
+  display: block;  /* 画像の下に余計な隙間ができないようにする */
+}
