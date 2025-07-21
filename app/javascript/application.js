@@ -1,6 +1,6 @@
 import "@hotwired/turbo-rails";
 import "./controllers";
-import "./analytics"
+import "./analytics";
 
 // showMessage 関数はそのまま
 function showMessage(text, imageUrl = null) {
@@ -8,9 +8,8 @@ function showMessage(text, imageUrl = null) {
   const displayMessage = text || "メッセージがありません";
 
   if (flashDiv) {
-    // 「すでにログインしています」メッセージを除外
     if (displayMessage === "You are already signed in." || displayMessage === "すでにログインしています。") {
-      return; // 何も表示しない
+      return;
     }
     
     flashDiv.innerHTML = imageUrl
@@ -41,17 +40,76 @@ const updateTimerDisplay = (ms) => {
   document.getElementById("timer").textContent = `${hours}:${minutes}:${seconds}`;
 };
 
+// ★ここから追加・修正するよ！★
+// ToDo完了チェックボックスのイベントリスナー登録を関数として切り出す
+function initializeTodoCheckboxes() {
+  document.querySelectorAll('input[type="checkbox"][data-remote="true"]').forEach(checkbox => {
+    // 既にイベントリスナーが登録されていないかチェックする（重複登録防止）
+    if (!checkbox.dataset.listenerAttached) {
+      checkbox.addEventListener('change', (event) => {
+        const url = event.target.dataset.url;
+        const method = event.target.dataset.method;
+
+        const formData = new FormData();
+        formData.append('record[completed]', event.target.checked ? 'true' : 'false');
+
+        fetch(url, {
+          method: method,
+          headers: {
+            'Accept': 'application/json',
+            'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").content
+          },
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            console.error("HTTPエラー:", response.status, response.statusText);
+            return response.json()
+              .catch(() => response.text())
+              .then(errorBody => {
+                throw new Error(`Server Error (${response.status}): ${errorBody}`);
+              });
+          }
+        })
+        .then(data => {
+          console.log("ToDo更新成功:", data);
+          const listItem = event.target.closest('li');
+          if (listItem) {
+            const taskNameSpan = listItem.querySelector('.task-name');
+            if (taskNameSpan) {
+              if (event.target.checked) {
+                taskNameSpan.classList.add('task-completed');
+              } else {
+                taskNameSpan.classList.remove('task-completed');
+              }
+            }
+          }
+        })
+        .catch(error => {
+          console.error("ToDo更新エラー:", error);
+          alert("ToDoの更新に失敗しました。");
+          if (error.message && error.message.startsWith("Server Error")) {
+              alert(`ToDoの更新に失敗しました。\n${error.message}`);
+          } else {
+              alert(`ToDoの更新に失敗しました。原因不明のエラーです。\n${error}`);
+          }
+        });
+      });
+      checkbox.dataset.listenerAttached = 'true'; // イベントリスナーがアタッチされたことを記録
+    }
+  });
+}
+
 document.addEventListener("turbo:load", () => {
   // --- トップページのアニメーションをトリガーするコード ---
   const topContent = document.querySelector('.top-content.initial-hidden');
   if (topContent) {
-    // ページロード直後に実行されるように少し遅延させる
-    // これにより、CSSの初期スタイル（opacity: 0;）がブラウザに適用されてから、
-    // アニメーションが開始される時間を確保できます。
     setTimeout(() => {
-      topContent.classList.remove('initial-hidden'); // 初期非表示クラスを削除
-      topContent.classList.add('fade-in-active');   // アニメーション開始クラスを追加
-    }, 100); // 100ミリ秒 (0.1秒) 程度のわずかな遅延
+      topContent.classList.remove('initial-hidden');
+      topContent.classList.add('fade-in-active');
+    }, 100);
   }
   // ------------------------------------------------------------------
 
@@ -82,18 +140,16 @@ document.addEventListener("turbo:load", () => {
     timerInterval = null;
   });
 
-  const recordTimeSubmitButton = document.getElementById("record_time_submit");
+  const recordButton = document.getElementById("record_time_submit");
   const recordTimeField = document.getElementById("record_time_field");
-  const timeRecordForm = document.getElementById("time_record_form");
 
-  if (recordTimeSubmitButton && recordTimeField && timeRecordForm) {
-    recordTimeSubmitButton.addEventListener("click", (event) => {
+  if (recordButton && recordTimeField) {
+    recordButton.addEventListener("click", (event) => {
       event.preventDefault();
 
       const timeInSeconds = Math.floor(elapsed / 1000);
       recordTimeField.value = timeInSeconds;
-
-      timeRecordForm.submit();
+      showMessage(`タイマーの時間が${timeInSeconds}秒にセットされました！`);
     });
   }
 
@@ -106,58 +162,11 @@ document.addEventListener("turbo:load", () => {
     }
   }
 
-  // ToDo完了チェックボックスのイベントリスナー
-  document.querySelectorAll('input[type="checkbox"][data-remote="true"]').forEach(checkbox => {
-    checkbox.addEventListener('change', (event) => {
-      const url = event.target.dataset.url;
-      const method = event.target.dataset.method;
 
-      const formData = new FormData();
-      formData.append('record[completed]', event.target.checked ? 'true' : 'false');
-
-      fetch(url, {
-        method: method,
-        headers: {
-          'Accept': 'application/json',
-          'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").content
-        },
-        body: formData
-      })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          console.error("HTTPエラー:", response.status, response.statusText);
-          return response.json()
-            .catch(() => response.text())
-            .then(errorBody => {
-              throw new Error(`Server Error (${response.status}): ${errorBody}`);
-            });
-        }
-      })
-      .then(data => {
-        console.log("ToDo更新成功:", data);
-        const listItem = event.target.closest('li');
-        if (listItem) {
-          const taskNameSpan = listItem.querySelector('.task-name');
-          if (taskNameSpan) {
-            if (event.target.checked) {
-              taskNameSpan.classList.add('task-completed');
-            } else {
-              taskNameSpan.classList.remove('task-completed');
-            }
-          }
-        }
-      })
-      .catch(error => {
-        console.error("ToDo更新エラー:", error);
-        alert("ToDoの更新に失敗しました。");
-        if (error.message && error.message.startsWith("Server Error")) {
-            alert(`ToDoの更新に失敗しました。\n${error.message}`);
-        } else {
-            alert(`ToDoの更新に失敗しました。原因不明のエラーです。\n${error}`);
-        }
-      });
-    });
-  });
+  initializeTodoCheckboxes();
 });
+
+document.addEventListener("turbo:render", () => {
+  initializeTodoCheckboxes(); // DOMが更新された後に再度イベントリスナーを登録
+});
+
