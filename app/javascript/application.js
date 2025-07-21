@@ -42,6 +42,19 @@ const updateTimerDisplay = (ms) => {
 };
 
 document.addEventListener("turbo:load", () => {
+  // --- トップページのアニメーションをトリガーするコード ---
+  const topContent = document.querySelector('.top-content.initial-hidden');
+  if (topContent) {
+    // ページロード直後に実行されるように少し遅延させる
+    // これにより、CSSの初期スタイル（opacity: 0;）がブラウザに適用されてから、
+    // アニメーションが開始される時間を確保できます。
+    setTimeout(() => {
+      topContent.classList.remove('initial-hidden'); // 初期非表示クラスを削除
+      topContent.classList.add('fade-in-active');   // アニメーション開始クラスを追加
+    }, 100); // 100ミリ秒 (0.1秒) 程度のわずかな遅延
+  }
+  // ------------------------------------------------------------------
+
   const toggle = document.getElementById("menu-toggle");
   const menu = document.getElementById("nav-menu");
 

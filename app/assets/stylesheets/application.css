@@ -663,3 +663,90 @@ hr {
 .fc .fc-day-today {
   background-color: #ffdcf6; 
 }
+.howtouse {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto; 
+}
+.howtouse2 {
+  max-width: 100%; /* 親要素の幅を超えないようにする */
+  height: auto;    /* 縦横比を保って自動調整 */
+  display: block;  /* 画像の下に余計な隙間ができないようにする */
+}
+/* detailsタグ全体のスタイル */
+.usage-details {
+  margin: 20px auto; /* 上下の余白と中央寄せ */
+  max-width: 800px;  /* 必要に応じて、最大幅を調整してください */
+  /* background-color: #fff5f5; */ /* record-descriptionに背景色があるため不要かもしれません */
+  /* border: 1px solid #fcd5ce; */ /* record-descriptionに枠線があるため不要かもしれません */
+  border-radius: 1em;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+/* summaryタグ（開閉ボタンとなる部分）のスタイル */
+.usage-details summary {
+  padding: 1em; /* 内側の余白 */
+  background-color: #ffe0e6; /* 背景色 */
+  cursor: pointer; /* マウスカーソルを指マークに */
+  list-style: none; /* デフォルトの矢印アイコンを非表示にする */
+  /* ↓ デフォルトのフォーカスリングが気になる場合、独自のスタイルを設定するか削除します */
+  /* outline: none; */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 中央揃え */
+  border-radius: 1em 1em 0 0; /* 上部だけ角丸にする */
+  font-size: 1.2em; /* フォントサイズ */
+  color: #5e1032; /* 文字色 */
+  font-weight: bold;
+}
+
+/* summary内のh2のスタイルを調整（もしh2を使っているなら） */
+.usage-details summary h2 {
+  margin: 0; /* h2のデフォルトマージンをリセット */
+  font-size: 1em; /* summaryのフォントサイズに合わせる */
+}
+
+/* detailsが開いているときのsummaryのスタイル（オプション） */
+.usage-details[open] summary {
+  border-bottom: 1px solid #fcd5ce; /* 開いたときに下線を追加 */
+  border-radius: 1em 1em 0 0; /* 上部だけ角丸を維持 */
+}
+
+/* record-descriptionのスタイル調整 */
+/* detailsの中に移動したので、必要に応じてpaddingなどを調整してください */
+.usage-details .record-description {
+  /* background-color: #fff5f5; */ /* 必要であれば背景色 */
+  /* border: 1px solid #fcd5ce; */ /* 必要であれば枠線 */
+  border-radius: 0 0 1em 1em; /* 下部だけ角丸にする */
+  padding: 1em; /* 内側の余白 */
+}
+/* トップコンテンツの初期状態（透明） */
+.fade-in-on-load {
+  opacity: 0; /* 最初は完全に透明にする */
+  transform: translateY(20px); /* 少し下にずらしておく（任意：下からフワッと浮き上がる効果） */
+  transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* 透明度と位置が1.5秒かけて変化するように設定 */
+}
+
+/* ページが読み込まれた後に、ふわっと表示させる */
+/* このスタイルは、JavaScriptなしで動作するために、
+   DOM Content Loadedイベントを待つようなブラウザの挙動を利用します。
+   （または、bodyにloadedクラスなどをJSで追加する方法もありますが、CSSのみを優先） */
+body:not(.initial-load-prevented) .fade-in-on-load {
+  opacity: 1; /* 透明度を1（完全に表示）にする */
+  transform: translateY(0); /* 元の位置に戻す */
+}
+/* トップコンテンツの初期状態（完全に透明で、少し下にずらす） */
+.initial-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* JavaScriptで追加されることでアニメーションがトリガーされるクラス */
+.fade-in-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* アニメーションの時間とイージング */
+}
