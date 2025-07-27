@@ -21,6 +21,11 @@ Rails.application.routes.draw do
   end
 end
 
+  resources :user_flowers, only: [:index] do
+    collection do
+      get :encyclopedia 
+    end
+  end
   # 開発環境専用のメール確認
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 

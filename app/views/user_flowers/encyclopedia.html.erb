@@ -1,0 +1,36 @@
+
+<div class="flower-encyclopedia-container">
+  <h1>🌸 花図鑑 🌸</h1>
+
+  <% if @encyclopedia_flowers.any? %>
+    <div class="flower-list">
+      <% @encyclopedia_flowers.each do |user_flower| %>
+        <div class="flower-card">
+          <%# 花の画像を表示 %>
+          <%# user_flower.flower は UserFlower モデルから関連付けられた Flower モデルのインスタンスだよ %>
+          <%# Flower モデルに 'name' カラムがあれば、それを使って画像ファイル名を指定できるよ %>
+          <% if user_flower.flower.present? %>
+            <%# 例: Flower.name が "紫陽花" なら "紫陽花.png" を表示 %>
+            <%= image_tag "#{user_flower.flower.name}.png", alt: user_flower.flower.name, class: "flower-image" %>
+          <% else %>
+            <%# 花の情報がない場合のプレースホルダー画像 %>
+            <%= image_tag "placeholder_flower.png", alt: "不明な花", class: "flower-image" %>
+          <% end %>
+
+          <h3 class="flower-name">
+            <%# 花の名前を表示 %>
+            <%= user_flower.flower.present? ? user_flower.flower.name : "不明な花" %>
+          </h3>
+          <%# 花を咲かせた日付を表示 %>
+          <p class="flower-date">咲かせた日: <%= l user_flower.created_at.to_date, format: :long %></p>
+          <%# 必要であれば、合計記録時間などもここに追加できるよ %>
+          <%# 例: <p>合計記録時間: <%= user_flower.records.sum(:time) / 60 %> 分</p> %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="no-flowers-message">まだ満開の花がないみたい。たくさん記録して花を咲かせよう！🌱</p>
+  <% end %>
+
+  <%= link_to "トップページへ戻る", root_path, class: "btn-back-to-home" %>
+</div>
