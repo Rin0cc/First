@@ -40,7 +40,6 @@ const updateTimerDisplay = (ms) => {
   document.getElementById("timer").textContent = `${hours}:${minutes}:${seconds}`;
 };
 
-// ★ここから追加・修正するよ！★
 // ToDo完了チェックボックスのイベントリスナー登録を関数として切り出す
 function initializeTodoCheckboxes() {
   document.querySelectorAll('input[type="checkbox"][data-remote="true"]').forEach(checkbox => {
@@ -142,14 +141,20 @@ document.addEventListener("turbo:load", () => {
 
   const recordButton = document.getElementById("record_time_submit");
   const recordTimeField = document.getElementById("record_time_field");
+  // HTML側で id="time_record_form" を持つフォームを取得する
+  const timeRecordForm = document.getElementById("time_record_form"); // ★この行を追加したよ！
 
-  if (recordButton && recordTimeField) {
+  if (recordButton && recordTimeField && timeRecordForm) { // ★timeRecordForm もチェックするよ！
     recordButton.addEventListener("click", (event) => {
-      event.preventDefault();
+      event.preventDefault(); // デフォルトのフォーム送信を停止
 
       const timeInSeconds = Math.floor(elapsed / 1000);
-      recordTimeField.value = timeInSeconds;
-      showMessage(`タイマーの時間が${timeInSeconds}秒にセットされました！`);
+      recordTimeField.value = timeInSeconds; // 隠しフィールドに時間をセット
+
+      // showMessage(`タイマーの時間が${timeInSeconds}秒にセットされました！`); // これはデバッグ用、またはタイマーセット確認用。花のメッセージはTurbo Streamで表示されるので、基本的には不要だよ。
+
+      // ★重要: フォームをプログラム的に送信する！
+      timeRecordForm.submit(); // ★この行を追加したよ！
     });
   }
 
@@ -162,11 +167,13 @@ document.addEventListener("turbo:load", () => {
     }
   }
 
-
   initializeTodoCheckboxes();
 });
 
 document.addEventListener("turbo:render", () => {
-  initializeTodoCheckboxes(); // DOMが更新された後に再度イベントリスナーを登録
+  initializeTodoCheckboxes(); 
+  const flashDiv = document.getElementById("flower-message");
+  if (flashDiv && flashDiv.dataset.flashMessage) {
+    showMessage(flashDiv.dataset.flashMessage, flashDiv.dataset.flashImage);
+  }
 });
-

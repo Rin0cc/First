@@ -15,11 +15,12 @@ Rails.application.routes.draw do
     end
   end
 
+  # records_controller のルーティング
   resources :records, only: [ :new, :create, :update, :destroy, :index, :show ] do
     collection do
       get "analytics"
-  end
-end
+    end 
+  end 
 
   resources :user_flowers, only: [:index] do
     collection do

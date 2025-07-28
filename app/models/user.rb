@@ -1,15 +1,12 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  # ★devise の設定に :omniauthable と omniauth_providers を追加/維持するよ！
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :recoverable, :rememberable, :validatable
 
   has_many :user_flowers, dependent: :destroy
   has_many :records, dependent: :destroy
 
-  # ★ユーザー作成後に初期の花を生成するコールバックを追加するよ！
   after_create :create_initial_flower
 
   def first_record_date
@@ -29,7 +26,6 @@ class User < ApplicationRecord
 
   private
 
-  # ★初期の花を生成するメソッドを追加するよ！
   def create_initial_flower
     default_flower = Flower.first # または Flower.find_by(name: "コスモス") など、適切な花を選択
     user_flowers.create(flower: default_flower, status: :waiting) if default_flower
