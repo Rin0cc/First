@@ -1,3 +1,5 @@
+# config/environments/production.rb
+
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -28,12 +30,7 @@ Rails.application.configure do
   # Compress JavaScripts using Uglifier.
   # config.assets.js_compressor = :uglifier # この行はコメントアウトのままでOK
 
-  # ★ここから修正・統一するよ！
-
-  # Deviseのメール送信のためのホスト設定（パスワードリセットリンクなどに使われる）
-  # 'bloomingrecord.com' は、あなたのアプリの実際のドメイン名に置き換えてください
-  # 例: Renderを使っているなら 'blooming-record.onrender.com' のようなURL
-  config.action_mailer.default_url_options = { host: 'bloomingrecord.com', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: 'bloomingrecord.com', protocol: 'https' } 
 
   # 本番環境で実際にメールを送信するためのSMTPサーバー設定
   config.action_mailer.raise_delivery_errors = true # エラーを発生させる場合は true に
@@ -50,11 +47,7 @@ Rails.application.configure do
     read_timeout:         5  # 読み込みタイムアウト
   }
 
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # ここをコメントアウト解除し、あなたのアプリの実際のURLに置き換えてください！
-  config.action_controller.asset_host = "https://bloomingrecord.com"
-
-  # ★ここまで修正・統一したよ！
+  config.action_controller.asset_host = "https://bloomingrecord.com" 
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
