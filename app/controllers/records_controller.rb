@@ -1,7 +1,7 @@
 class RecordsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user_flower
   before_action :set_record, only: [ :update, :destroy, :edit ]
+  before_action :set_user_flower, except: [:update, :destroy] 
 
   def new
     @record = @user_flower.records.build
@@ -9,20 +9,20 @@ class RecordsController < ApplicationController
   end
 
   def create
-    time_in_seconds = record_params[:time].to_i
+  time_in_seconds = record_params[:time].to_i
 
-    # ToDo追加フォームからの送信か、時間記録フォームからの送信かを判断
-    is_todo_only_submission = record_params[:task_name].present? && time_in_seconds == 0
+  is_todo_only_submission = record_params[:task_name].present? && time_in_seconds == 0
 
-    if !is_todo_only_submission && time_in_seconds < 1800
-      flash[:alert] = "✨ 記録ありがとう！（30分以上から花は育つよ）"
-      flash[:flower_image] = "Thanks.png"
-      redirect_to new_record_path
-      return
-    end
+  safe_params = record_params.merge(user: current_user, time: time_in_seconds)
 
-    @record = @user_flower.records.build(record_params.merge(user: current_user))
+  if !is_todo_only_submission && time_in_seconds < 1800
+    flash[:alert] = "✨ 記録ありがとう！（30分以上から花は育つよ）"
+    flash[:flower_image] = "Thanks.png"
+    redirect_to new_record_path
+    return
+  end
 
+  @record = @user_flower.records.build(safe_params)
     respond_to do |format|
       if @record.save
         @user_flower.reload
@@ -100,13 +100,14 @@ class RecordsController < ApplicationController
     end.to_json.html_safe
   end
 
-  def update
-    if @record.update(record_params)
-      render json: { status: "success", message: "ToDoが更新されました！", completed: @record.completed }
-    else
-      render json: { status: "error", message: @record.errors.full_messages.join(", ") }, status: :unprocessable_entity
-    end
+def update
+  @record = current_user.records.find(params[:id])
+  if @record.update(record_params)
+    render json: @record, status: :ok
+  else
+    render json: { errors: @record.errors.full_messages }, status: :unprocessable_entity
   end
+end
 
   def destroy
     @record.destroy

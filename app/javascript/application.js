@@ -49,17 +49,21 @@ function initializeTodoCheckboxes() {
         const url = event.target.dataset.url;
         const method = event.target.dataset.method;
 
-        const formData = new FormData();
-        formData.append('record[completed]', event.target.checked ? 'true' : 'false');
+fetch(url, {
+  method: method,
+  credentials: "same-origin", // ← これを追加
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
+  },
+  body: JSON.stringify({
+    record: {
+      completed: event.target.checked
+    }
+  })
+})
 
-        fetch(url, {
-          method: method,
-          headers: {
-            'Accept': 'application/json',
-            'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").content
-          },
-          body: formData
-        })
         .then(response => {
           if (response.ok) {
             return response.json();
