@@ -35,7 +35,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.default_url_options = { host: 'https://bloomingrecord.com/', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: "https://bloomingrecord.com/", protocol: "https" }
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
   config.action_mailer.perform_caching = false

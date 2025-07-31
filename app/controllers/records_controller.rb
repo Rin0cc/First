@@ -1,7 +1,7 @@
 class RecordsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_record, only: [ :update, :destroy, :edit ]
-  before_action :set_user_flower, except: [:update, :destroy] 
+  before_action :set_user_flower, except: [ :update, :destroy ]
 
   def new
     @record = @user_flower.records.build

@@ -19,12 +19,12 @@ Rails.application.routes.draw do
   resources :records, only: [ :new, :create, :update, :destroy, :index, :show ] do
     collection do
       get "analytics"
-    end 
-  end 
+    end
+  end
 
-  resources :user_flowers, only: [:index] do
+  resources :user_flowers, only: [ :index ] do
     collection do
-      get :encyclopedia 
+      get :encyclopedia
     end
   end
   # 開発環境専用のメール確認
