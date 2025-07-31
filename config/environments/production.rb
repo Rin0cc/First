@@ -25,12 +25,33 @@ Rails.application.configure do
 
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
+  # Compress JavaScripts using Uglifier.
+  # config.assets.js_compressor = :uglifier # この行はコメントアウトのままでOK
+
+  # Deviseのメール送信のためのホスト設定（パスワードリセットリンクなどに使われる）
+
+  config.action_mailer.default_url_options = { host: 'bloomingrecord.com', protocol: 'https' }
+
+  # 本番環境で実際にメールを送信するためのSMTPサーバー設定
+  config.action_mailer.raise_delivery_errors = true # エラーを発生させる場合は true に
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com', # GmailのSMTPサーバー
+    port:                 587,              # 通常は587 (TLS) または 465 (SSL)
+    domain:               'gmail.com',      # あなたのドメイン、またはGmailのドメイン
+    user_name:            Rails.application.credentials.production[:gmail][:username], # Credentialsから取得するGmailアドレス
+    password:             Rails.application.credentials.production[:gmail][:password], # Credentialsから取得するGmailのアプリパスワード
+    authentication:       'plain',
+    enable_starttls_auto: true,
+    open_timeout:         5, # 接続タイムアウト
+    read_timeout:         5  # 読み込みタイムアウト
+  }
+
+  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  config.action_controller.asset_host = "https://bloomingrecord.com"
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
-
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.asset_host = "http://assets.example.com"
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
@@ -80,7 +101,7 @@ Rails.application.configure do
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  # config.action_mailer.raise_delivery_errors = false 
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
@@ -102,4 +123,8 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # ホストの許可設定（Host Authorization）
+  config.hosts << "bloomingrecord.com"         # 独自ドメイン
+  config.hosts << "www.bloomingrecord.com"     # 独自ドメインのwwwサブドメイン
+  config.hosts << "blooming-record.onrender.com" # RenderのデフォルトURL
 end
