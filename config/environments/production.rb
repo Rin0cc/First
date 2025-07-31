@@ -1,5 +1,3 @@
-# config/environments/production.rb
-
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -7,7 +5,7 @@ Rails.application.configure do
 
   # Code is not reloaded between requests.
   config.enable_reloading = false
-  config.action_mailer.default_url_options = { host: 'bloomingrecord.com', protocol: 'https' }
+
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
@@ -30,8 +28,11 @@ Rails.application.configure do
   # Compress JavaScripts using Uglifier.
   # config.assets.js_compressor = :uglifier # この行はコメントアウトのままでOK
 
-  # Deviseのメール送信のためのホスト設定（パスワードリセットリンクなどに使われる）
+  # ★ここから修正・統一するよ！
 
+  # Deviseのメール送信のためのホスト設定（パスワードリセットリンクなどに使われる）
+  # 'bloomingrecord.com' は、あなたのアプリの実際のドメイン名に置き換えてください
+  # 例: Renderを使っているなら 'blooming-record.onrender.com' のようなURL
   config.action_mailer.default_url_options = { host: 'bloomingrecord.com', protocol: 'https' }
 
   # 本番環境で実際にメールを送信するためのSMTPサーバー設定
@@ -50,26 +51,14 @@ Rails.application.configure do
   }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  # ここをコメントアウト解除し、あなたのアプリの実際のURLに置き換えてください！
   config.action_controller.asset_host = "https://bloomingrecord.com"
+
+  # ★ここまで修正・統一したよ！
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
-  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-
-  config.action_controller.asset_host = "https://bloomingrecord.com"
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:              'smtp.gmail.com', # GmailのSMTPサーバー
-    port:                 587,              # 通常は587 (TLS) または 465 (SSL)
-    domain:               'gmail.com',      # あなたのドメイン、またはGmailのドメイン
-    user_name:            ENV['GMAIL_USERNAME'], # 環境変数から取得するGmailアドレス
-    password:             ENV['GMAIL_PASSWORD'], # 環境変数から取得するGmailのアプリパスワード
-    authentication:       'plain',
-    enable_starttls_auto: true,
-    open_timeout:         5, # 接続タイムアウト
-    read_timeout:         5  # 読み込みタイムアウト
-  }
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
@@ -80,7 +69,7 @@ Rails.application.configure do
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = "wss://example.com/cable"
-  # config.action_cable.allowed_request_origins = [ "http://example.com", /http:\/\/example.*/ ]
+  # config.action_cable.allowed_request_origins = [ "http://example.com", /http://example.*/ ]
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   # Can be used together with config.force_ssl for Strict-Transport-Security and secure cookies.
