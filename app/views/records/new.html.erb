@@ -26,11 +26,10 @@
 <%= form_with model: @record, url: records_path, data: { turbo: false }, id: "time_record_form" do |f| %>
   <div id="timer-section" data-flower-id="<%= @user_flower.id %>">
     <div id="timer">00:00:00</div>
-    <div class="timer-controls"> <%# ボタンをまとめるためのdivを追加 %>
+    <div class="timer-controls">
       <button type="button" id="start" class="btn-start">開始</button>
       <button type="button" id="stop" class="btn-stop">停止</button>
-      <%# ★ここを修正！ type="button" に変更するよ★ %>
-      <button type="button" id="record_time_submit" class="btn-record">記録する</button> 
+      <button type="button" id="record_time_submit" class="btn-record">記録する</button>
     </div>
 
     <div id="seed-image" style="display: none;">
@@ -39,7 +38,6 @@
   </div>
 
   <%= f.hidden_field :time, id: "record_time_field" %>
-  <%# このフォームには、時間入力用の隠しフィールドだけ。送信ボタンは不要。 %>
 <% end %>
 <%# === ストップウォッチ関連のフォーム（時間記録用）ここまで === %>
 
@@ -87,12 +85,12 @@
   <% end %>
 
   <%# === ToDoリスト表示部分 ここから === %>
-  <div class="todo-list-container">
+  <div class="todo-list-container" id="todo-list">
     <h3>未完了のToDo</h3>
     <ul id="todo_items" class="todo-list">
       <%= render partial: 'record', collection: @records %>
     </ul>
   </div>
   <%# === ToDoリスト表示部分 ここまで === %>
-  <link_to "カレンダー/グラフへ",anatl , class: "btn-calendar" %>
+  <%= link_to "カレンダー/グラフへ", analytics_records_path, class: "btn-calendar" %>
 </div>
