@@ -12,6 +12,8 @@ class RecordsController < ApplicationController
     is_todo_only_submission = record_params[:task_name].present? && record_params[:time].to_i == 0
 
     if is_todo_only_submission
+      # ToDoタスクの作成
+      # `@user_flower` が before_action で確実にセットされているはず
       @record = @user_flower.records.build(record_params.merge(user: current_user))
       
       respond_to do |format|
@@ -135,10 +137,23 @@ class RecordsController < ApplicationController
                   .order(created_at: :desc)
                   .first
 
-    @user_flower ||= current_user.user_flowers.create(
-      flower: Flower.first,
-      status: :waiting
-    )
+    # ユーザーの花が見つからない場合、新しく作成する
+    @user_flower ||=
+      if Flower.first
+        current_user.user_flowers.create(
+          flower: Flower.first,
+          status: :waiting
+        )
+      else
+        # 花のデータが存在しない場合の特別な処理
+        nil
+      end
+
+    # ここで@user_flowerがnilではないか確認し、nilならエラーを返す
+    if @user_flower.nil?
+      flash[:alert] = "花のデータが見つかりません。管理者に連絡してください。"
+      redirect_to root_path and return
+    end
   end
 
   def update_flower_status
