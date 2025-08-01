@@ -2,6 +2,55 @@ import "@hotwired/turbo-rails";
 import "./controllers";
 import "./analytics";
 
+// エラーメッセージ用のカスタムモーダルを表示する関数
+function showModal(title, message) {
+  // 既存のモーダルがあれば削除する
+  const existingModal = document.querySelector('.custom-modal');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // モーダルのHTML要素をJavaScriptで作成
+  const modalContainer = document.createElement('div');
+  modalContainer.className = 'fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 transition-opacity duration-300 ease-in-out custom-modal fade-in';
+  
+  modalContainer.innerHTML = `
+    <div class="bg-white rounded-xl shadow-2xl p-6 m-4 w-full max-w-sm transform transition-all duration-300 ease-in-out modal-content scale-in">
+        <h3 class="text-xl font-bold mb-2 text-center text-gray-800">${title}</h3>
+        <p class="mb-4 text-center text-gray-600">${message}</p>
+        <button id="modal-ok-button" class="w-full bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-md transform hover:scale-105">
+            OK
+        </button>
+    </div>
+  `;
+  
+  // bodyの一番最後にモーダルを追加
+  document.body.appendChild(modalContainer);
+
+  // モーダルを閉じるためのイベントリスナーを設定
+  const modalOkButton = document.getElementById('modal-ok-button');
+  modalOkButton.addEventListener('click', () => {
+    closeModal(modalContainer);
+  });
+  // 背景クリックでも閉じられるように設定
+  modalContainer.addEventListener('click', (e) => {
+    if (e.target === modalContainer) {
+      closeModal(modalContainer);
+    }
+  });
+}
+
+// モーダルを閉じる関数
+function closeModal(modalElement) {
+    modalElement.classList.remove('fade-in');
+    modalElement.classList.add('fade-out');
+    
+    // アニメーション完了後にDOMから要素を削除
+    modalElement.addEventListener('animationend', () => {
+        modalElement.remove();
+    }, { once: true });
+}
+
 // showMessage 関数はそのまま
 function showMessage(text, imageUrl = null) {
   const flashDiv = document.getElementById("flower-message");
@@ -11,7 +60,7 @@ function showMessage(text, imageUrl = null) {
     if (displayMessage === "You are already signed in." || displayMessage === "すでにログインしています。") {
       return;
     }
-    
+
     flashDiv.innerHTML = imageUrl
       ? `${displayMessage}<br><img src="${imageUrl}" alt="花の画像" style="max-width: 120px; margin-top: 10px;">`
       : displayMessage;
@@ -40,7 +89,6 @@ const updateTimerDisplay = (ms) => {
   document.getElementById("timer").textContent = `${hours}:${minutes}:${seconds}`;
 };
 
-// ★ここから追加・修正するよ！★
 // ToDo完了チェックボックスのイベントリスナー登録を関数として切り出す
 function initializeTodoCheckboxes() {
   document.querySelectorAll('input[type="checkbox"][data-remote="true"]').forEach(checkbox => {
@@ -50,30 +98,29 @@ function initializeTodoCheckboxes() {
         const url = event.target.dataset.url;
         const method = event.target.dataset.method;
 
-fetch(url, {
-  method: method,
-  credentials: "same-origin", // ← これを追加
-  headers: {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
-  },
-  body: JSON.stringify({
-    record: {
-      completed: event.target.checked
-    }
-  })
-})
-
+        fetch(url, {
+          method: method,
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
+          },
+          body: JSON.stringify({
+            record: {
+              completed: event.target.checked
+            }
+          })
+        })
         .then(response => {
           if (response.ok) {
             return response.json();
           } else {
-            console.error("HTTPエラー:", response.status, response.statusText);
             return response.json()
               .catch(() => response.text())
               .then(errorBody => {
-                throw new Error(`Server Error (${response.status}): ${errorBody}`);
+                const errorMessage = `ToDoの更新に失敗しました。サーバーエラー: ${response.status}`;
+                throw new Error(errorMessage);
               });
           }
         })
@@ -93,12 +140,8 @@ fetch(url, {
         })
         .catch(error => {
           console.error("ToDo更新エラー:", error);
-          alert("ToDoの更新に失敗しました。");
-          if (error.message && error.message.startsWith("Server Error")) {
-              alert(`ToDoの更新に失敗しました。\n${error.message}`);
-          } else {
-              alert(`ToDoの更新に失敗しました。原因不明のエラーです。\n${error}`);
-          }
+          // showModalを使って、エラーメッセージを優しく表示
+          showModal("エラー", "ToDoの更新に失敗しました。");
         });
       });
       checkbox.dataset.listenerAttached = 'true'; // イベントリスナーがアタッチされたことを記録
@@ -146,14 +189,16 @@ document.addEventListener("turbo:load", () => {
 
   const recordButton = document.getElementById("record_time_submit");
   const recordTimeField = document.getElementById("record_time_field");
+  const timeRecordForm = document.getElementById("time_record_form");
 
-  if (recordButton && recordTimeField) {
+  if (recordButton && recordTimeField && timeRecordForm) {
     recordButton.addEventListener("click", (event) => {
-      event.preventDefault();
+      event.preventDefault(); // デフォルトのフォーム送信を停止
 
       const timeInSeconds = Math.floor(elapsed / 1000);
-      recordTimeField.value = timeInSeconds;
-      showMessage(`タイマーの時間が${timeInSeconds}秒にセットされました！`);
+      recordTimeField.value = timeInSeconds; // 隠しフィールドに時間をセット
+
+      timeRecordForm.submit(); // フォームをプログラム的に送信する！
     });
   }
 
@@ -166,11 +211,14 @@ document.addEventListener("turbo:load", () => {
     }
   }
 
-
+  // ToDo完了チェックボックスのイベントリスナーを初期化
   initializeTodoCheckboxes();
 });
 
 document.addEventListener("turbo:render", () => {
-  initializeTodoCheckboxes(); // DOMが更新された後に再度イベントリスナーを登録
+  initializeTodoCheckboxes();
+  const flashDiv = document.getElementById("flower-message");
+  if (flashDiv && flashDiv.dataset.flashMessage) {
+    showMessage(flashDiv.dataset.flashMessage, flashDiv.dataset.flashImage);
+  }
 });
-

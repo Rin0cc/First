@@ -1,7 +1,7 @@
 class RecordsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_record, only: [ :update, :destroy, :edit ]
-  before_action :set_user_flower, except: [:update, :destroy] 
+  before_action :set_user_flower, except: [ :update, :destroy ]
 
   def new
     @record = @user_flower.records.build
@@ -9,52 +9,62 @@ class RecordsController < ApplicationController
   end
 
   def create
-  time_in_seconds = record_params[:time].to_i
+    is_todo_only_submission = record_params[:task_name].present? && record_params[:time].to_i == 0
 
-  is_todo_only_submission = record_params[:task_name].present? && time_in_seconds == 0
+    if is_todo_only_submission
+      @record = @user_flower.records.build(record_params.merge(user: current_user))
+      
+      respond_to do |format|
+        if @record.save
+          # Turbo Streamで新しいToDoをリストに追加し、フォームをリセット
+          format.html { redirect_to new_record_path(anchor: 'todo-list') }
+          format.turbo_stream do
+            render turbo_stream: [
+              turbo_stream.prepend("todo_items", partial: "records/record", locals: { record: @record }),
+              turbo_stream.replace("record_errors", partial: "shared/error_messages", locals: { resource: @record }),
+              turbo_stream.update("new_record_form", partial: "records/form", locals: { record: Record.new })
+            ]
+          end
+        else
+          # 保存失敗時のエラーハンドリング
+          @records = current_user.records.where(completed: false).order(created_at: :desc)
+          format.html { render :new, status: :unprocessable_entity }
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace("record_errors", partial: "shared/error_messages", locals: { resource: @record })
+          end
+        end
+      end
+    else
+      # --- 時間記録の処理 ---
+      time_in_seconds = record_params[:time].to_i
+      
+      # 30分未満の場合はリダイレクトしてメッセージを表示
+      if time_in_seconds < 1800
+        flash[:alert] = "✨ 記録ありがとう！（30分以上から花は育つよ）"
+        flash[:flower_image] = "Thanks.png"
+        redirect_to new_record_path
+        return
+      end
 
-  safe_params = record_params.merge(user: current_user, time: time_in_seconds)
-
-  if !is_todo_only_submission && time_in_seconds < 1800
-    flash[:alert] = "✨ 記録ありがとう！（30分以上から花は育つよ）"
-    flash[:flower_image] = "Thanks.png"
-    redirect_to new_record_path
-    return
-  end
-
-  @record = @user_flower.records.build(safe_params)
-    respond_to do |format|
-      if @record.save
-        @user_flower.reload
-
-        # 花の状態更新とFlashメッセージの設定は、time_in_seconds が 1800 以上の場合のみ行う
-        if !is_todo_only_submission && time_in_seconds >= 1800
+      # 時間記録用のレコードを作成
+      @record = @user_flower.records.build(record_params.merge(user: current_user))
+      
+      respond_to do |format|
+        if @record.save
+          @user_flower.reload
+          # 花の状態更新とFlashメッセージの設定
           message, image_file_name, new_flower_id_for_js = update_flower_status
           flash[:notice] = message
           flash[:flower_image] = image_file_name
           flash[:new_flower_id] = new_flower_id_for_js
-        end
-
-        format.html { redirect_to new_record_path }
-        format.turbo_stream do
-          if is_todo_only_submission
-            # ToDo追加の場合：新しいToDoをリストの先頭に追加し、フォームをリセット
-            render turbo_stream: [
-              turbo_stream.prepend("todo_items", partial: "records/record", locals: { record: @record }),
-              turbo_stream.replace("record_errors", partial: "shared/error_messages", locals: { resource: @record }), # エラー表示をクリア
-              turbo_stream.update("new_record_form", partial: "records/form", locals: { record: Record.new }) # フォームをリセット
-            ]
-          else
-            # 時間記録の場合は、HTMLリダイレクトと同じ効果（ページ全体をリロード）
-            render turbo_stream: turbo_stream.action(:redirect, new_record_path)
-          end
-        end
-      else
-        flash.now[:alert] = "ToDoの作成に失敗しました。内容を確認してください。"
-        @records = current_user.records.where(completed: false).order(created_at: :desc)
-        format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace("record_errors", partial: "shared/error_messages", locals: { resource: @record })
+          
+          # HTMLリダイレクトと同じ効果（ページ全体をリロード）
+          format.html { redirect_to new_record_path }
+          format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, new_record_path) }
+        else
+          # 保存失敗時のエラーハンドリング
+          flash[:alert] = "時間記録の保存に失敗しました。"
+          redirect_to new_record_path
         end
       end
     end
@@ -100,14 +110,15 @@ class RecordsController < ApplicationController
     end.to_json.html_safe
   end
 
-def update
-  @record = current_user.records.find(params[:id])
-  if @record.update(record_params)
-    render json: @record, status: :ok
-  else
-    render json: { errors: @record.errors.full_messages }, status: :unprocessable_entity
+  def update
+    @record = current_user.records.find(params[:id])
+    if @record.update(record_params)
+      render json: @record, status: :ok
+    else
+      # エラー時のレスポンスをJSONで返す
+      render json: { errors: @record.errors.full_messages }, status: :unprocessable_entity
+    end
   end
-end
 
   def destroy
     @record.destroy
@@ -170,7 +181,7 @@ end
   end
 
   def record_params
-    params.require(:record).permit(:task_name, :completed, :time, :user_flower_id, :completed)
+    params.require(:record).permit(:task_name, :completed, :time, :user_flower_id)
   end
 
   def set_record
