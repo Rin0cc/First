@@ -1,88 +1,105 @@
+# app/controllers/records_controller.rb
 class RecordsController < ApplicationController
+  # ログイン済みのユーザーのみアクセス可能
   before_action :authenticate_user!
-  before_action :set_record, only: [ :update, :destroy, :edit ]
-  before_action :set_user_flower, except: [ :update, :destroy ]
+  
+  # 特定のレコードを取得するアクション
+  before_action :set_record, only: [:update, :destroy, :edit, :show]
+  
+  # ユーザーのお花をセットする（なければ新しく作成）
+  before_action :set_user_flower, except: [:update, :destroy, :show, :analytics]
 
+  # 新しいToDoのフォームとToDoリストを表示する
   def new
+    # before_actionで設定された@user_flowerを使って新しいレコードをビルドするよ
+    # これで@record.user_flower_idが自動でセットされる
     @record = @user_flower.records.build
-    @records = current_user.records.where(completed: false).order(created_at: :desc)
+    # 未完了のToDoを新しい順に取得
+    @records = @user_flower.records.incomplete.order(created_at: :desc)
+    # 完了済みのToDoを古い順に取得
+    @completed_records = @user_flower.records.completed.order(created_at: :desc)
+    # newアクションではリダイレクトは発生しない。単にビューをレンダリングする
   end
 
+  # ToDoの追加または時間記録の作成
   def create
-    is_todo_only_submission = record_params[:task_name].present? && record_params[:time].to_i == 0
+    # ストロングパラメータを使って新しいレコードを初期化
+    @record = Record.new(record_params)
+    
+    # ユーザーと花を明示的に紐付け
+    # ここで必ずuser_idとuser_flower_idをセットすることで、NullViolationを防ぐ
+    @record.user_id = current_user.id
+    @record.user_flower_id = @user_flower.id
 
-    if is_todo_only_submission
-      # ToDoタスクの作成
-      # `@user_flower` が before_action で確実にセットされているはず
-      @record = @user_flower.records.build(record_params.merge(user: current_user))
-      
+    # ToDo追加のみか、時間記録かを判別
+    is_todo_only_submission = record_params[:task_name].present? && record_params[:time].to_i == 0
+    time_in_seconds = record_params[:time].to_i
+
+    # 時間記録の場合で30分未満の処理
+    if !is_todo_only_submission && time_in_seconds < 1800
+      flash[:alert] = "✨ 記録ありがとう！（30分以上から花は育つよ）"
+      flash[:flower_image] = "Thanks.png"
       respond_to do |format|
-        if @record.save
+        format.html { redirect_to new_record_path }
+        # Turbo Streamでリダイレクトを処理することで、ページ全体のリロードを避ける
+        format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, new_record_path) }
+      end
+      return
+    end
+
+    respond_to do |format|
+      if @record.save
+        if is_todo_only_submission
           # Turbo Streamで新しいToDoをリストに追加し、フォームをリセット
           format.html { redirect_to new_record_path(anchor: 'todo-list') }
           format.turbo_stream do
             render turbo_stream: [
               turbo_stream.prepend("todo_items", partial: "records/record", locals: { record: @record }),
               turbo_stream.replace("record_errors", partial: "shared/error_messages", locals: { resource: @record }),
-              turbo_stream.update("new_record_form", partial: "records/form", locals: { record: Record.new })
+              # フォームを更新する際、user_flower_idがセットされた新しいRecordオブジェクトを渡す
+              turbo_stream.update("new_record_form", partial: "records/form", locals: { record: @user_flower.records.build })
             ]
           end
-        else
-          # 保存失敗時のエラーハンドリング
-          @records = current_user.records.where(completed: false).order(created_at: :desc)
-          format.html { render :new, status: :unprocessable_entity }
-          format.turbo_stream do
-            render turbo_stream: turbo_stream.replace("record_errors", partial: "shared/error_messages", locals: { resource: @record })
-          end
-        end
-      end
-    else
-      # --- 時間記録の処理 ---
-      time_in_seconds = record_params[:time].to_i
-      
-      # 30分未満の場合はリダイレクトしてメッセージを表示
-      if time_in_seconds < 1800
-        flash[:alert] = "✨ 記録ありがとう！（30分以上から花は育つよ）"
-        flash[:flower_image] = "Thanks.png"
-        redirect_to new_record_path
-        return
-      end
-
-      # 時間記録用のレコードを作成
-      @record = @user_flower.records.build(record_params.merge(user: current_user))
-      
-      respond_to do |format|
-        if @record.save
+        else # 時間記録の場合
           @user_flower.reload
-          # 花の状態更新とFlashメッセージの設定
           message, image_file_name, new_flower_id_for_js = update_flower_status
           flash[:notice] = message
           flash[:flower_image] = image_file_name
           flash[:new_flower_id] = new_flower_id_for_js
-          
           # HTMLリダイレクトと同じ効果（ページ全体をリロード）
           format.html { redirect_to new_record_path }
           format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, new_record_path) }
+        end
+      else # 保存失敗時のエラーハンドリング
+        # @recordsを再取得してビューに渡す
+        @records = current_user.records.where(completed: false).order(created_at: :desc)
+        if is_todo_only_submission
+          # Turbo Streamでエラーメッセージだけを更新する
+          format.html { render :new, status: :unprocessable_entity }
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace("record_errors", partial: "shared/error_messages", locals: { resource: @record })
+          end
         else
-          # 保存失敗時のエラーハンドリング
           flash[:alert] = "時間記録の保存に失敗しました。"
-          redirect_to new_record_path
+          format.html { redirect_to new_record_path }
+          format.turbo_stream { render turbo_stream: turbo_stream.action(:redirect, new_record_path) }
         end
       end
     end
   end
-
+  
   def edit
   end
 
   def show
-    @record = Record.find(params[:id])
   end
 
   def index
+    # 通常、indexはレコードの一覧を表示するが、このアプリではnewにリダイレクト
     redirect_to new_record_path
   end
 
+  # アナリティクス画面のデータを準備する
   def analytics
     # Chart.js 用のデータ準備 (日ごとの合計記録時間)
     user_records = current_user.records.where.not(time: nil)
@@ -112,8 +129,8 @@ class RecordsController < ApplicationController
     end.to_json.html_safe
   end
 
+  # ToDoの完了ステータスを更新する（APIとして使用）
   def update
-    @record = current_user.records.find(params[:id])
     if @record.update(record_params)
       render json: @record, status: :ok
     else
@@ -122,54 +139,44 @@ class RecordsController < ApplicationController
     end
   end
 
+  # ToDoを削除する
   def destroy
     @record.destroy
-    redirect_to new_record_path, notice: "ToDoが削除されました。"
+    # ToDo追加時と同様に、リダイレクトではなくTurbo Streamで処理
+    respond_to do |format|
+      format.html { redirect_to new_record_path, notice: "ToDoが削除されました。" }
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(@record) }
+    end
   end
 
   private
 
+  # ユーザーのお花をセットする（なければ作成）
   def set_user_flower
-    @user_flower =
-      current_user.user_flowers
-                  .where.not(status: :full_bloom)
-                  .or(current_user.user_flowers.where(status: :waiting))
-                  .order(created_at: :desc)
-                  .first
-
-    # ユーザーの花が見つからない場合、新しく作成する
-    @user_flower ||=
-      if Flower.first
-        current_user.user_flowers.create(
-          flower: Flower.first,
-          status: :waiting
-        )
-      else
-        # 花のデータが存在しない場合の特別な処理
-        nil
-      end
-
-    # ここで@user_flowerがnilではないか確認し、nilならエラーを返す
+    # ユーザーに紐づく、満開（:full_bloom）でない最新のお花を取得
+    # もし見つからなければ、新しいお花を種（:seed）の状態で作成
+    # この`find_or_create_by`を使うことで、花がない場合でもエラーにならない
+    @user_flower = current_user.user_flowers.find_by(status: :waiting) ||
+                   current_user.user_flowers.find_by(status: :seed) ||
+                   current_user.user_flowers.find_by(status: :sprout) ||
+                   current_user.user_flowers.find_by(status: :bud)
+    
+    # 全てのお花が満開の場合、新しいお花を作成
     if @user_flower.nil?
-      flash[:alert] = "花のデータが見つかりません。管理者に連絡してください。"
-      redirect_to root_path and return
+      @user_flower = current_user.user_flowers.create!(flower: Flower.first, status: :waiting)
     end
   end
 
+  # 花の状態を更新し、メッセージと画像を返す
   def update_flower_status
-    new_flower_id_for_js = nil
-
-    if @user_flower.records.empty?
-      @user_flower.update(status: :seed)
-      return [ "🪴 花の種を取得しました", "Flowerseeds.png", new_flower_id_for_js ]
-    end
-
     record_days = @user_flower.records
                               .pluck(:created_at)
                               .map { |t| t.in_time_zone("Asia/Tokyo").to_date }
                               .uniq
 
     day_count = record_days.count
+
+    new_flower_id_for_js = nil
 
     case day_count
     when 1
@@ -183,22 +190,22 @@ class RecordsController < ApplicationController
       [ "💧 花に水やりしました", "Bud.png", new_flower_id_for_js ]
     when 7
       @user_flower.update(status: :full_bloom)
-      new_flower = current_user.user_flowers.create(
-        flower: Flower.first,
-        status: :waiting
-      )
+      # 満開になったら新しい花（待ちの状態）を作成する
+      new_flower = current_user.user_flowers.create(flower: Flower.first, status: :waiting)
       new_flower_id_for_js = new_flower.id if new_flower.persisted?
 
-      [ "🌸 花が咲きました！", [ "FullBloom1.png", "FullBloom2.png" ].sample.to_s, new_flower_id_for_js ]
+      [ "🌸 花が咲きました！", ["FullBloom1.png", "FullBloom2.png"].sample.to_s, new_flower_id_for_js ]
     else
       [ "✨ 記録ありがとう！花は成長中だよ！", "Thanks.png", new_flower_id_for_js ]
     end
   end
 
+  # ストロングパラメータ
   def record_params
     params.require(:record).permit(:task_name, :completed, :time, :user_flower_id)
   end
 
+  # 現在のユーザーに紐づくレコードを取得
   def set_record
     @record = current_user.records.find(params[:id])
   end
