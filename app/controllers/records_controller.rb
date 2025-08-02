@@ -1,4 +1,3 @@
-# app/controllers/records_controller.rb
 class RecordsController < ApplicationController
   # ログイン済みのユーザーのみアクセス可能
   before_action :authenticate_user!
@@ -11,14 +10,19 @@ class RecordsController < ApplicationController
 
   # 新しいToDoのフォームとToDoリストを表示する
   def new
-    # before_actionで設定された@user_flowerを使って新しいレコードをビルドするよ
-    # これで@record.user_flower_idが自動でセットされる
-    @record = @user_flower.records.build
-    # 未完了のToDoを新しい順に取得
-    @records = @user_flower.records.incomplete.order(created_at: :desc)
-    # 完了済みのToDoを古い順に取得
-    @completed_records = @user_flower.records.completed.order(created_at: :desc)
-    # newアクションではリダイレクトは発生しない。単にビューをレンダリングする
+    # @user_flowerが存在する場合のみ、レコードをビルドする
+    if @user_flower.present?
+      @record = @user_flower.records.build
+      # 未完了のToDoを新しい順に取得
+      @records = @user_flower.records.incomplete.order(created_at: :desc)
+      # 完了済みのToDoを古い順に取得
+      @completed_records = @user_flower.records.completed.order(created_at: :desc)
+    else
+      # @user_flowerが存在しない場合は、空のレコードを生成
+      @record = Record.new
+      @records = []
+      @completed_records = []
+    end
   end
 
   # ToDoの追加または時間記録の作成
@@ -154,16 +158,23 @@ class RecordsController < ApplicationController
   # ユーザーのお花をセットする（なければ作成）
   def set_user_flower
     # ユーザーに紐づく、満開（:full_bloom）でない最新のお花を取得
-    # もし見つからなければ、新しいお花を種（:seed）の状態で作成
-    # この`find_or_create_by`を使うことで、花がない場合でもエラーにならない
-    @user_flower = current_user.user_flowers.find_by(status: :waiting) ||
-                   current_user.user_flowers.find_by(status: :seed) ||
-                   current_user.user_flowers.find_by(status: :sprout) ||
-                   current_user.user_flowers.find_by(status: :bud)
+    @user_flower = current_user.user_flowers.find_by(status: [:waiting, :seed, :sprout, :bud])
     
-    # 全てのお花が満開の場合、新しいお花を作成
+    # 全てのお花が満開、またはお花がない場合
     if @user_flower.nil?
-      @user_flower = current_user.user_flowers.create!(flower: Flower.first, status: :waiting)
+      # `Flower.first`が`nil`の場合を考慮
+      if Flower.first
+        @user_flower = current_user.user_flowers.create(flower: Flower.first, status: :waiting)
+        # 作成に失敗した場合
+        if @user_flower.nil? || @user_flower.errors.any?
+          flash[:alert] = "花の作成に失敗しました。管理者に連絡してください。"
+          redirect_to root_path and return
+        end
+      else
+        # そもそも`Flower`レコードがない場合
+        flash[:alert] = "花のデータが見つかりません。管理者に連絡してください。"
+        redirect_to root_path and return
+      end
     end
   end
 
