@@ -160,19 +160,25 @@ class RecordsController < ApplicationController
     # ユーザーに紐づく、満開（:full_bloom）でない最新のお花を取得
     @user_flower = current_user.user_flowers.find_by(status: [:waiting, :seed, :sprout, :bud])
     
-    # 全てのお花が満開、またはお花がない場合
+    # ユーザーのお花が見つからない場合
     if @user_flower.nil?
-      # `Flower.first`が`nil`の場合を考慮
-      if Flower.first
-        @user_flower = current_user.user_flowers.create(flower: Flower.first, status: :waiting)
-        # 作成に失敗した場合
-        if @user_flower.nil? || @user_flower.errors.any?
-          flash[:alert] = "花の作成に失敗しました。管理者に連絡してください。"
-          redirect_to root_path and return
-        end
-      else
-        # そもそも`Flower`レコードがない場合
+      # `Flower`モデルにレコードが一つもない場合、自動的にデフォルトのお花を作成します。
+      # すでにある場合は最初のお花を取得します。
+      default_flower = Flower.first_or_create(name: "ひまわり")
+      
+      # 既存の花も自動作成した花も取得できなかった場合はエラー
+      if default_flower.nil?
+        # このエラーは通常発生しないはずですが、念のため残しておきます。
         flash[:alert] = "花のデータが見つかりません。管理者に連絡してください。"
+        redirect_to root_path and return
+      end
+
+      # デフォルトのお花を使って、新しい`UserFlower`を作成します。
+      @user_flower = current_user.user_flowers.create(flower: default_flower, status: :waiting)
+      
+      # 作成に失敗した場合のハンドリング
+      unless @user_flower.persisted?
+        flash[:alert] = "花の作成に失敗しました。管理者に連絡してください。"
         redirect_to root_path and return
       end
     end
