@@ -1,3 +1,5 @@
+require_dependency "user"
+
 Rails.application.routes.draw do
   # 利用規約など静的ページ
   get "pages/terms", to: "pages#terms", as: "pages_terms"
@@ -18,17 +20,18 @@ Rails.application.routes.draw do
   end
 
   # records_controller のルーティング
-  resources :records, only: [ :new, :create, :update, :destroy, :index, :show ] do
+  resources :records, only: [:new, :create, :update, :destroy, :index, :show] do
     collection do
       get "analytics"
     end
   end
 
-  resources :user_flowers, only: [ :index ] do
+  resources :user_flowers, only: [:index] do
     collection do
       get :encyclopedia
     end
   end
+
   # 開発環境専用のメール確認
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
