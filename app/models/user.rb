@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
   has_many :user_flowers, dependent: :destroy
   has_many :records, dependent: :destroy
@@ -24,7 +24,7 @@ class User < ApplicationRecord
       user.username = "名無しフラワーさん🌼"
     end
   end
-  
+
   def first_record_date
     records.order(created_at: :asc).first&.created_at&.in_time_zone("Asia/Tokyo")&.to_date
   end
