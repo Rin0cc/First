@@ -1,4 +1,3 @@
-# app/controllers/users/omniauth_callbacks_controller.rb
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2
     # Userモデルのfrom_omniauthメソッドを呼び出してユーザーを検索または作成します
