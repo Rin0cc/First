@@ -13,6 +13,7 @@
   <li><%= link_to "✏️プロフィールを編集", edit_user_registration_path %></li>
   <li><%= link_to "📚記録する", new_record_path %></li>
   <li><%= link_to "🗓️カレンダー/グラフ", analytics_records_path %></li> 
+  <%= link_to "✔️ToDoリスト", tasks_path, class: "btn btn-info" %>
   <li><%= link_to "🏆ランキング", ranking_users_path %></li> 
   <li><%= link_to "💐図鑑", encyclopedia_user_flowers_path %></li>
   <li>
@@ -25,4 +26,4 @@
             %>
   </li>
   <li><%= link_to "🚪ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %></li>
-</ul> # テスト
+</ul>

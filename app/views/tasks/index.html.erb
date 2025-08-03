@@ -1,0 +1,45 @@
+<h1>ToDoリスト✔️</h1>
+
+<h2>🔍 タスクを検索</h2>
+<%= form_with url: tasks_path, method: :get, local: true do |form| %>
+  <%= form.text_field :search, placeholder: "タスク名で検索...", value: params[:search] %>
+  <%= form.submit "検索" %>
+<% end %>
+
+<hr>
+
+<h2>未完了のToDo</h2>
+<% if @incomplete_records.any? %>
+  <ul class="todo-list">
+    <% @incomplete_records.each do |record| %>
+      <li>
+        <span class="task-name"><%= record.task_name %></span>
+        <%# ここを修正するよ！ %>
+        <%= link_to "完了にする", toggle_completion_task_path(record), data: { turbo_method: :patch }, class: "btn-toggle-completion" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>未完了のToDoはないよ！お疲れ様！👏</p>
+<% end %>
+
+<hr>
+
+<h2>完了済みのToDo</h2>
+<% if @completed_records.any? %>
+  <ul class="todo-list completed">
+    <% @completed_records.each do |record| %>
+      <li>
+        <span class="task-name completed"><%= record.task_name %></span>
+        <%# ここも修正するよ！ %>
+        <%= link_to "未完了に戻す", toggle_completion_task_path(record), data: { turbo_method: :patch }, class: "btn-toggle-completion" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>まだ完了したToDoはないみたい🍀</p>
+<% end %>
+<hr>
+<%= link_to"📚記録へ戻る", records_path, class: "btn-back-to-records" %>
+<%= link_to "✔️ToDoリストを見る", tasks_path, class: "btn btn-info" %>
+

@@ -25,7 +25,14 @@ Rails.application.routes.draw do
       get "analytics"
     end
   end
-
+  
+  resources :tasks, only: [:index] do # `tasks#index`でToDoリスト一覧を表示するよ
+    member do
+      # 特定のタスクの完了状態を切り替えるアクション
+      patch :toggle_completion
+    end
+  end
+  
   resources :user_flowers, only: [:index] do
     collection do
       get :encyclopedia
