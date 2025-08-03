@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   get "pages/privacy", to: "pages#privacy", as: "pages_privacy"
 
   # devise関連
-  devise_for :users
+  devise_for :users, controllers: {
+    omniauth_callbacks: 'users/omniauth_callbacks'
+  }
   get "/sign_up", to: redirect("/users/sign_up")
 
   root "top#index"
