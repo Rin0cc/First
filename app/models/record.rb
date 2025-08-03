@@ -1,5 +1,3 @@
-# app/models/record.rb
-
 class Record < ApplicationRecord
   belongs_to :user
   belongs_to :user_flower, optional: true
@@ -19,5 +17,9 @@ class Record < ApplicationRecord
   # ToDoのみの記録であるかを判定するヘルパーメソッド
   def task_only_record?
     task_name.present? && (time.nil? || time == 0)
+  end
+
+  def self.search(query)
+    where("task_name LIKE ?", "%#{query}%") if query.present?
   end
 end
