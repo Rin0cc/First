@@ -38,9 +38,10 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: "https://bloomingrecord.com/", protocol: "https" }
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
-  config.action_mailer.perform_caching = false
+config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  # Action Mailerで本番環境のURLを使用する設定
+  config.action_mailer.default_url_options = { host: "bloomingrecord.com", protocol: "https" }
   ActionMailer::Base.delivery_method = :letter_opener_web
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
