@@ -1,5 +1,3 @@
-require_dependency "user"
-
 Rails.application.routes.draw do
   # 利用規約など静的ページ
   get "pages/terms", to: "pages#terms", as: "pages_terms"
