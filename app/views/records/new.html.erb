@@ -94,3 +94,53 @@
   <%# === ToDoリスト表示部分 ここまで === %>
   <%= link_to "カレンダー/グラフへ", analytics_records_path, class: "btn-calendar" %>
 </div>
+
+<!-- 紙吹雪ライブラリを読み込みます -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js"></script>
+
+<script>
+
+// アプリを使い始めた実際の日付に設定してください。
+const startDate = new Date('<%= current_user.created_at.strftime('%Y-%m-%dT%H:%M:%S') %>'); 
+const today = new Date();
+
+// 経過日数を計算します
+const diffTime = Math.abs(today.getTime() - startDate.getTime());
+const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+// 経過日数が7日目の場合のみ、紙吹雪を降らせます
+if (diffDays === 7) {
+    var duration = 15 * 1000;
+    var animationEnd = Date.now() + duration;
+    var skew = 1;
+
+    function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    (function frame() {
+        var timeLeft = animationEnd - Date.now();
+        var ticks = Math.max(200, 500 * (timeLeft / duration));
+        skew = Math.max(0.8, skew - 0.001);
+
+        confetti({
+            particleCount: 1,
+            startVelocity: 0,
+            ticks: ticks,
+            origin: {
+                x: Math.random(),
+                y: (Math.random() * skew) - 0.2
+            },
+            colors: ['#ffa4c2ff'],
+            shapes: ['circle'],
+            gravity: randomInRange(0.4, 0.6),
+            scalar: randomInRange(0.4, 1),
+            drift: randomInRange(-0.4, 0.4)
+        });
+
+        if (timeLeft > 0) {
+            requestAnimationFrame(frame);
+        }
+    }());
+}
+</script>
