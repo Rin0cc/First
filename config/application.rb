@@ -15,6 +15,7 @@ require "rails/test_unit/railtie"
 # require "sprockets/railtie" # ここは引き続きコメントアウトのまま！
 require "rails/command"
 # require "rails/health/railtie"
+require "omniauth/rails_csrf_protection"
 
 # Gemfileのgemを読み込む
 Bundler.require(*Rails.groups)
