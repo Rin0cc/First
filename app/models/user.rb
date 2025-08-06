@@ -1,27 +1,24 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [ :google_oauth2 ]
+         :omniauthable, omniauth_providers: [:google_oauth2]
 
   has_many :user_flowers, dependent: :destroy
   has_many :records, dependent: :destroy
 
-  # 新規作成時にusernameが必須であることを検証
   validates :username, presence: true, on: :create
 
-  # ユーザーが作成された後に、初回のお花を自動で作成する
   after_create :create_initial_flower
 
-  # OmniAuthでユーザーを検索または作成するメソッド
   def self.from_omniauth(auth)
-    # providerとuidを使ってユーザーを検索し、存在しない場合は新規作成します。
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
-      # パスワードはDeviseが自動生成するランダムな文字列を設定します。
       user.password = Devise.friendly_token[0, 20]
-      user.username = "名無しフラワーさん🌼"
+      user.username = auth.info.name.presence || "名無しフラワーさん🌼"
+    end.tap do |user|
+      unless user.persisted?
+        Rails.logger.error "💥 User save failed: #{user.errors.full_messages.join(', ')}"
+      end
     end
   end
 
@@ -42,7 +39,6 @@ class User < ApplicationRecord
 
   private
 
-  # 初回のお花を作成するメソッド
   def create_initial_flower
     default_flower = Flower.find_or_create_by(name: "コスモス")
     if default_flower.persisted?
