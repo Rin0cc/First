@@ -9,7 +9,7 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 require 'omniauth/rails_csrf_protection' 
-OmniAuth.config.allowed_request_methods = %i[get]
+OmniAuth.config.allowed_request_methods = %i[get post]
 Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
