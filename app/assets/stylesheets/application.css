@@ -803,3 +803,128 @@ body:not(.initial-load-prevented) .fade-in-on-load {
     text-decoration: line-through;
     color: #9ca3af; /* Tailwind gray-400 */
   }
+/* ログインページ全体の中央配置 */
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0eaff, #ffe3f0); /* 淡いけどはっきり見える色 */
+  padding: 20px;
+    gap: 20px;
+}
+
+/* タイトル */
+.login-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* カード風フォーム */
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* フィールド */
+.login-form .field {
+  margin-bottom: 15px;
+}
+
+.login-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"],
+.login-form input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+.login-form input[type="email"]:focus,
+.login-form input[type="password"]:focus,
+login-form input[type="text"]:focus {
+  border-color: #c5a8ff;
+  outline: none;
+}
+
+/* ボタン */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #ffbad6;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-btn:hover {
+  background: #fa9ac1;
+}
+
+/* リンク部分 */
+.login-links {
+  /*margin-top: 15px;*/
+  text-align: center;
+}
+
+.login-links a {
+  color: #a17ce7;
+  text-decoration: none;
+  margin: 0 5px;
+  font-size: 14px;
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}
+/* 新規登録ページ用のCSS */
+.signup-page {
+  /* 背景色の変更 */
+  background: linear-gradient(135deg, #e0eaff, #ffe3f0); ; /* 青系の淡いグラデーション */
+}
+
+/* 新規登録ボタンの色の変更 */
+.signup-page .login-btn {
+  background: #a1d38e; /* 鮮やかな水色 */
+}
+
+.signup-page .login-btn:hover {
+  background: #85ca6a; /* ホバー時の色 */
+}
+/* アカウント削除ボタンのスタイル */
+.delete-btn {
+  width: auto; /* ボタンの幅をコンテンツに合わせる */
+  padding: 8px 12px;
+  background: #ff6b6b; /* 赤系の色 */
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: inline-block; /* ボタンが1行に収まるように */
+}
+
+.delete-btn:hover {
+  background: #ff4757; /* ホバー時の色 */
+}
