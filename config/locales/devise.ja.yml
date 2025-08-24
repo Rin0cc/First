@@ -25,31 +25,32 @@ ja:
       user:
         one: "ユーザー"
         other: "ユーザー"
-      # ★ここから追記★
-      record: # Record モデルの日本語名
+      record:
         one: "記録"
         other: "記録"
+
     attributes:
-      record: # Record モデルの属性名
+      user:
+        email: "Eメール"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認用）"
+      record:
         task_name: "作業内容"
         time: "時間"
+
     errors:
       models:
+        user:
+          attributes:
+            email:
+              taken: "は既に登録されています"
+            password:
+              too_short: "は%{count}文字以上で入力してください"
+            password_confirmation:
+              confirmation: "が一致しません"
         record:
           attributes:
             task_name:
-              blank: "を入力してください" # Record の task_name が空の場合のメッセージ
+              blank: "を入力してください"
             time:
-              greater_than: "は0より大きい値にしてください" # Record の time が greater_than バリデーションに引っかかった場合のメッセージ
-      # ★ここまで追記★
-
-  password_resets:
-    new:
-      title: "パスワードリセット申請"
-      submit: "送信"
-    edit:
-      title: "パスワードリセット"
-    create:
-      success: "パスワードリセット手順を送信しました"
-    update:
-      success: "パスワードを変更しました"
+              greater_than: "は0より大きい値にしてください"
