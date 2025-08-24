@@ -6,11 +6,8 @@
       <% @encyclopedia_flowers.each do |user_flower| %>
         <div class="flower-card">
           <%# 花の画像を表示 %>
-          <%# user_flower.flower は UserFlower モデルから関連付けられた Flower モデルのインスタンスだよ %>
-          <%# Flower モデルに 'name' カラムがあれば、それを使って画像ファイル名を指定できるよ %>
           <% if user_flower.flower.present? %>
-            <%# 例: Flower.name が "紫陽花" なら "紫陽花.png" を表示 %>
-            <%= image_tag "#{user_flower.flower.name}.png", alt: user_flower.flower.name, class: "flower-image" %>
+            <%= image_tag user_flower.flower.bloom_image_path, alt: user_flower.flower.name, class: "flower-image" %>
           <% else %>
             <%# 花の情報がない場合のプレースホルダー画像 %>
             <%= image_tag "placeholder_flower.png", alt: "不明な花", class: "flower-image" %>

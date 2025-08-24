@@ -7,3 +7,15 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+# db/seeds.rb
+# db/seeds.rb
+
+# Flowerモデルの初期データを設定します。
+# find_or_create_by!を使用することで、データを重複して作成するのを防ぎます。
+Flower.find_or_create_by!(name: "コスモス") do |flower|
+  flower.bloom_image_path = "image/Flower_name1.png"
+end
+
+Flower.find_or_create_by!(name: "紫陽花") do |flower|
+  flower.bloom_image_path = "FullBloom2.png"
+end
