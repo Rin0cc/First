@@ -433,33 +433,46 @@ button {
     background-color: #ffc2d1;
 }
 
-/* エラーメッセージのスタイル */
-.error-messages {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    border-radius: 5px;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    text-align: left;
-    box-sizing: border-box;
+/* エラーメッセージ全体 */
+#error_explanation {
+  background-color: #ffe6ea; /* ピンク系の淡い背景 */
+  color: #ff4757; 
+  border: 2px dashed #ff99aa; /* 破線にして柔らかく */
+  border-radius: 12px; /* 丸みを強めに */
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* ふんわり影 */
 }
 
-.error-messages h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.1em;
-    color: #721c24;
+/* 件数の見出し */
+#error_explanation h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #ff4757; 
 }
 
-.error-messages ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* エラーリスト */
+#error_explanation ul {
+  list-style: none; /* 丸や数字を消す */
+  padding: 0;
+  margin: 0;
 }
 
-.error-messages li {
-    margin-bottom: 5px;
+/* 各エラーメッセージ */
+#error_explanation li {
+  margin-bottom: 8px;
+  padding-left: 25px; /* アイコンスペース */
+  position: relative;
+}
+
+/* エラーアイコン */
+#error_explanation li::before {
+  content: "🌷"; /* 可愛いアイコンに変更 */
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 /* ストップウォッチのボタンのスタイル調整 */
