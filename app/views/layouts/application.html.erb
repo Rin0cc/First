@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for?(:title) ? yield(:title) : "MyApp" %></title>
+    <title><%= content_for?(:title) ? yield(:title) : "ぶるーみんぐれこーど" %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
+
+    <meta property="og:image" content="<%= asset_url('logo2.png') %>">
+
   </head>
 
   <body>
     <header class="header">
       <div class="header-inner">
         <div class="logo">
-        <%= link_to root_path do %>
-        <%= image_tag "logoheader.png", alt: "ぶるーみんぐれこーど ロゴ", class: "header-logo" %>
-      <% end %>
+          <%= link_to root_path do %>
+            <%= image_tag "logoheader.png", alt: "ぶるーみんぐれこーど ロゴ", class: "header-logo" %>
+          <% end %>
         </div>
         <div class="menu-area">
           <button class="menu-toggle" id="menu-toggle">
@@ -33,7 +36,6 @@
     <main class="container">
       <div class="content">
         <%= yield %>
-
       </div>
     </main>
 
