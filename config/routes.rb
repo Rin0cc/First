@@ -18,20 +18,20 @@ Rails.application.routes.draw do
   end
 
   # records_controller のルーティング
-  resources :records, only: [:new, :create, :update, :destroy, :index, :show] do
+  resources :records, only: [ :new, :create, :update, :destroy, :index, :show ] do
     collection do
       get "analytics"
     end
   end
-  
-  resources :tasks, only: [:index] do # `tasks#index`でToDoリスト一覧を表示するよ
+
+  resources :tasks, only: [ :index ] do # `tasks#index`でToDoリスト一覧を表示するよ
     member do
       # 特定のタスクの完了状態を切り替えるアクション
       patch :toggle_completion
     end
   end
-  
-  resources :user_flowers, only: [:index] do
+
+  resources :user_flowers, only: [ :index ] do
     collection do
       get :encyclopedia
     end

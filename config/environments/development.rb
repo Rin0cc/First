@@ -37,8 +37,8 @@ Rails.application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.default_url_options = { host: "https://bloomingrecord.com/", protocol: "https" }
-  # Disable caching for Action Mailer templates even if Action Controller
-  # caching is enabled.
+# Disable caching for Action Mailer templates even if Action Controller
+# caching is enabled.
 config.action_mailer.perform_caching = false
 
   # Action Mailerで本番環境のURLを使用する設定
