@@ -461,13 +461,6 @@ button {
 }
 
 /* 各エラーメッセージ */
-#error_explanation li {
-  margin-bottom: 8px;
-  padding-left: 25px; /* アイコンスペース */
-  position: relative;
-}
-
-/* エラーアイコン */
 #error_explanation li::before {
   content: "🌷"; /* 可愛いアイコンに変更 */
   position: absolute;
@@ -570,6 +563,13 @@ hr {
         width: 100%; /* リストアイテムも全幅 */
         text-align: center; /* テキスト中央寄せ */
         margin: 0.3rem 0;
+    }
+
+    .nav-menu a {
+        text-decoration: none;
+        color: #333;
+        display: block; /* クリック領域を広げる */
+        padding: 0.2rem 0;
     }
 
     .content, .todo-section, .top-content, .record-description, .record-time, .error-messages {
@@ -763,6 +763,7 @@ body:not(.initial-load-prevented) .fade-in-on-load {
   transform: translateY(0);
   transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* アニメーションの時間とイージング */
 }
+/* ========== モーダル関連 ========== */
 .modal-container {
   visibility: hidden;
   position: fixed;
@@ -775,47 +776,66 @@ body:not(.initial-load-prevented) .fade-in-on-load {
   justify-content: center;
   align-items: center;
   z-index: 9999; /* z-indexを高く設定 */
+  transition: opacity 0.3s ease; /* 透明度のトランジション */
+  opacity: 0; /* 初期状態は透明 */
 }
-  .modal-container.is-visible {
-    visibility: visible;
-  }
-  .modal-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    max-width: 90%;
-    width: 400px;
-  }
-  .modal-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    color: #ef4444; /* Tailwind red-500 */
-  }
-  .modal-message {
-    font-size: 1rem;
-    color: #4b5563; /* Tailwind gray-600 */
-    margin-bottom: 1.5rem;
-  }
-  .modal-close-button {
-    background-color: #fca5a5; /* Tailwind red-300 */
-    color: #7f1d1d; /* Tailwind red-900 */
-    padding: 0.5rem 1.5rem;
-    border: none;
-    border-radius: 9999px; /* Rounded-full */
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s ease;
-  }
-  .modal-close-button:hover {
-    background-color: #ef4444; /* Tailwind red-500 */
-  }
-  .task-completed {
-    text-decoration: line-through;
-    color: #9ca3af; /* Tailwind gray-400 */
-  }
+
+.modal-container.is-visible {
+  visibility: visible;
+  opacity: 1; /* 表示時に透明度を1に */
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 90%;
+  width: 400px;
+  transform: scale(0.95); /* 初期状態は少し小さく */
+  transition: transform 0.3s ease; /* スケールのトランジション */
+}
+
+.modal-container.is-visible .modal-content {
+  transform: scale(1); /* 表示時に元のサイズに */
+}
+
+/* モーダルのタイトルとメッセージのスタイルはそのまま */
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #ef4444; /* Tailwind red-500 */
+}
+
+.modal-message {
+  font-size: 1rem;
+  color: #4b5563; /* Tailwind gray-600 */
+  margin-bottom: 1.5rem;
+}
+
+/* OKボタンのスタイルはそのまま */
+.modal-close-button {
+  background-color: #fca5a5; /* Tailwind red-300 */
+  color: #7f1d1d; /* Tailwind red-900 */
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 9999px; /* Rounded-full */
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.modal-close-button:hover {
+  background-color: #ef4444; /* Tailwind red-500 */
+}
+
+.task-completed {
+  text-decoration: line-through;
+  color: #9ca3af; /* Tailwind gray-400 */
+}
+
 /* ログインページ全体の中央配置 */
 .login-page {
   display: flex;
