@@ -5,14 +5,15 @@ import "./analytics";
 // エラーメッセージ用のカスタムモーダルを表示する関数
 function showModal(title, message) {
   // 既存のモーダルがあれば削除する
-  const existingModal = document.querySelector('.custom-modal');
+  const existingModal = document.querySelector('.modal-container');
   if (existingModal) {
     existingModal.remove();
   }
 
   // モーダルのHTML要素をJavaScriptで作成
   const modalContainer = document.createElement('div');
-  modalContainer.className = 'fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 transition-opacity duration-300 ease-in-out custom-modal fade-in';
+  // Tailwind CSSのz-indexを非常に高く設定
+  modalContainer.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-gray-900 bg-opacity-50 transition-opacity duration-300 ease-in-out modal-container fade-in';
   
   modalContainer.innerHTML = `
     <div class="bg-white rounded-xl shadow-2xl p-6 m-4 w-full max-w-sm transform transition-all duration-300 ease-in-out modal-content scale-in">
@@ -89,65 +90,6 @@ const updateTimerDisplay = (ms) => {
   document.getElementById("timer").textContent = `${hours}:${minutes}:${seconds}`;
 };
 
-// ToDo完了チェックボックスのイベントリスナー登録を関数として切り出す
-function initializeTodoCheckboxes() {
-  document.querySelectorAll('input[type="checkbox"][data-remote="true"]').forEach(checkbox => {
-    // 既にイベントリスナーが登録されていないかチェックする（重複登録防止）
-    if (!checkbox.dataset.listenerAttached) {
-      checkbox.addEventListener('change', (event) => {
-        const url = event.target.dataset.url;
-        const method = event.target.dataset.method;
-
-        fetch(url, {
-          method: method,
-          credentials: "same-origin",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
-          },
-          body: JSON.stringify({
-            record: {
-              completed: event.target.checked
-            }
-          })
-        })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            return response.json()
-              .catch(() => response.text())
-              .then(errorBody => {
-                const errorMessage = `ToDoの更新に失敗しました。サーバーエラー: ${response.status}`;
-                throw new Error(errorMessage);
-              });
-          }
-        })
-        .then(data => {
-          console.log("ToDo更新成功:", data);
-          const listItem = event.target.closest('li');
-          if (listItem) {
-            const taskNameSpan = listItem.querySelector('.task-name');
-            if (taskNameSpan) {
-              if (event.target.checked) {
-                taskNameSpan.classList.add('task-completed');
-              } else {
-                taskNameSpan.classList.remove('task-completed');
-              }
-            }
-          }
-        })
-        .catch(error => {
-          console.error("ToDo更新エラー:", error);
-          // showModalを使って、エラーメッセージを優しく表示
-          showModal("エラー", "ToDoの更新に失敗しました。");
-        });
-      });
-      checkbox.dataset.listenerAttached = 'true'; // イベントリスナーがアタッチされたことを記録
-    }
-  });
-}
 
 document.addEventListener("turbo:load", () => {
   // --- トップページのアニメーションをトリガーするコード ---
@@ -210,13 +152,9 @@ document.addEventListener("turbo:load", () => {
       showMessage(flashMessage, flashImage);
     }
   }
-
-  // ToDo完了チェックボックスのイベントリスナーを初期化
-  initializeTodoCheckboxes();
 });
 
 document.addEventListener("turbo:render", () => {
-  initializeTodoCheckboxes();
   const flashDiv = document.getElementById("flower-message");
   if (flashDiv && flashDiv.dataset.flashMessage) {
     showMessage(flashDiv.dataset.flashMessage, flashDiv.dataset.flashImage);

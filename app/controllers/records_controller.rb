@@ -134,14 +134,25 @@ class RecordsController < ApplicationController
   end
 
   # ToDoの完了ステータスを更新する（APIとして使用）
-  def update
-    if @record.update(record_params)
-      render json: @record, status: :ok
-    else
-      # エラー時のレスポンスをJSONで返す
-      render json: { errors: @record.errors.full_messages }, status: :unprocessable_entity
+def update
+  if @record.update(record_params)
+    # 更新に成功したら、Turbo Streamでレコードを置き換える
+    respond_to do |format|
+      format.html { redirect_to new_record_path } # フォールバック
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(@record, partial: "records/record", locals: { record: @record })
+      end
+    end
+  else
+    # エラー時のレスポンスをTurbo Streamで返す
+    respond_to do |format|
+      format.html { render :edit, status: :unprocessable_entity } # フォールバック
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace("record_errors", partial: "shared/error_messages", locals: { resource: @record })
+      end
     end
   end
+end
 
   # ToDoを削除する
   def destroy
