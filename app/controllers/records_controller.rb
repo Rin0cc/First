@@ -133,7 +133,7 @@ class RecordsController < ApplicationController
     end.to_json.html_safe
   end
 
-  # ToDoの完了ステータスを更新する（APIとして使用）
+# ToDoの完了ステータスを更新する（APIとして使用）
 def update
   if @record.update(record_params)
     # 更新に成功したら、Turbo Streamでレコードを置き換える
