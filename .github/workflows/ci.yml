@@ -65,4 +65,5 @@ jobs:
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get insta
+        run: sudo apt-get update && sudo apt-get install
+        
