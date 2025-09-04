@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [ main ]
   push:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   scan_ruby:
@@ -83,6 +83,16 @@ jobs:
           node-version: 20
           cache: npm
 
+      - name: Wait for PostgreSQL
+        run: |
+          for i in $(seq 1 10); do
+            echo "Waiting for PostgreSQL to be ready... attempt $i"
+            if pg_isready -h db -U postgres; then
+              break
+            fi
+            sleep 1
+          done
+
       - name: Setup DB
         env:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
@@ -119,8 +129,8 @@ jobs:
           from: GitHub Actions
 
       - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
         if: failure()
+        uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
