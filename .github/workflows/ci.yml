@@ -77,6 +77,13 @@ jobs:
           node-version: 24.4.1
           cache: npm
 
+      - name: Wait for DB
+        run: |
+          until pg_isready -h db -U postgres; do
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+
       - name: Run tests
         env:
           RAILS_ENV: test
