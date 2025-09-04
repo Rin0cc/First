@@ -57,7 +57,6 @@ jobs:
 
     env:
       RAILS_ENV: ci
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
     steps:
       - name: Install packages
@@ -79,6 +78,8 @@ jobs:
           cache: npm
 
       - name: Setup DB
+        env:
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
           bin/rails db:create
           bin/rails db:schema:load
