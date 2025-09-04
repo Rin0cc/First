@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -54,7 +54,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
-
     env:
       RAILS_ENV: ci
       PGHOST: db
@@ -92,6 +91,18 @@ jobs:
       - name: Run tests
         run: bundle exec rspec
 
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
+
+  notify:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
       - name: Send email on success
         if: success()
         uses: dawidd6/action-send-mail@v3
@@ -101,7 +112,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: '[CI Success] All tests passed!'
-          body: 'All tests passed successfully for ${{ github.ref }} on ${{ github.event.after }}.'
+          body: 'All tests passed successfully for ${{ github.ref }} on ${{ github.sha }}.'
           to: ${{ secrets.MAIL_USERNAME }}
           from: GitHub Actions
 
@@ -114,14 +125,6 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: '[CI Failure] Tests failed!'
-          body: 'Some tests failed for ${{ github.ref }} on ${{ github.event.after }}. Please check the workflow run for details.'
+          body: 'Some tests failed for ${{ github.ref }} on ${{ github.sha }}. Please check the workflow run for details.'
           to: ${{ secrets.MAIL_USERNAME }}
           from: GitHub Actions
-
-      - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: screenshots
-          path: ${{ github.workspace }}/tmp/screenshots
-          if-no-files-found: ignore
