@@ -49,6 +49,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
+          POSTGRES_DB: blooming_record_test
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
@@ -82,21 +83,10 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Wait for PostgreSQL
-        run: |
-          for i in $(seq 1 10); do
-            echo "Waiting for PostgreSQL to be ready... attempt $i"
-            if pg_isready -h db -U postgres; then
-              break
-            fi
-            sleep 1
-          done
-
       - name: Setup DB
         env:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          bin/rails db:create
           bin/rails db:schema:load
 
       - name: Run tests
