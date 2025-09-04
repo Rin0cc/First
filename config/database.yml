@@ -13,3 +13,7 @@ development:
 test:
   <<: *default
   database: blooming_record_test
+
+ci:
+  <<: *default
+  database: blooming_record_test
