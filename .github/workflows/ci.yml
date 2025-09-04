@@ -97,7 +97,7 @@ jobs:
         env:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          bin/rails db:schema:load
+          RAILS_ENV=test bin/rails db:schema:load
 
       - name: Run tests
         run: bundle exec rspec
