@@ -57,6 +57,7 @@ jobs:
 
     env:
       RAILS_ENV: ci
+      DATABASE_URL: postgres://postgres:password@db:5432/blooming_record_test
 
     steps:
       - name: Install packages
@@ -76,14 +77,6 @@ jobs:
         with:
           node-version: 20
           cache: npm
-
-      - name: Wait for PostgreSQL
-        run: |
-          set -e
-          while ! pg_isready -h db -U postgres; do
-            echo "Waiting for database..."
-            sleep 1
-          done
 
       - name: Setup DB
         env:
