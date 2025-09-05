@@ -6,6 +6,8 @@ ja:
         submit: "パスワード再設定用メールを送信"
     labels:
       email: "メールアドレス"
+    omniauth_callbacks:
+      success: "%{kind}アカウントでのログインに成功しました。Googleユーザーの場合、デフォルトの名前は名無しフラワーさん🌼になります。"
 
   errors:
     messages:
