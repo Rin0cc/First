@@ -2,7 +2,7 @@
 
 ## ■ ぶるーみんぐれこーど
 サービスURL: https://bloomingrecord.com/  
-![ぶるーみんぐれこーどロゴ](app/assets/images/logoo2.png)
+![ぶるーみんぐれこーどロゴ](app/assets/images/logo2.png)
 
 ## ■ サービス概要  
 毎日、何かを頑張っている人のための記録アプリです。  
