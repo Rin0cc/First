@@ -89,12 +89,12 @@ RUNTEQのポモドーロ勉強法を通じて、努力を可視化すること�
 
 ## ■ 使用技術
 - フロントエンド：HTML / CSS / JavaScript (Node.js 20.19.2, Yarn 1.22.22, esbuild)
-- バックエンド：Ruby 3.3.6 /  Ruby 3.3.6
+- バックエンド：Ruby 3.3.6 /  Ruby on Rails 7.2.2.1
 - データベース：PostgreSQL 15
 - インフラ：Docker / Render
 
-画面遷移図（Figma）：URL  https://www.figma.com/design/4kCCVCXhWqxJIdVIifQLZE/%E7%84%A1%E9%A1%8C?node-id=0-1&p=f
-ER図（diagrams.net）：URL  https://app.diagrams.net/#G19dhmxyBBigMYUA72SGwaE7c-xSvxEKhQ#%7B%22pageId%22%3A%225xM9FkNxEeX8kEIw1n2u%22%7D
+- 画面遷移図（Figma）: [こちら](https://www.figma.com/design/4kCCVCXhWqxJIdVIifQLZE/%E7%84%A1%E9%A1%8C?node-id=0-1&p=f)
+- ER図（diagrams.net）: [こちら](https://app.diagrams.net/#G19dhmxyBBigMYUA72SGwaE7c-xSvxEKhQ#%7B%22pageId%22%3A%225xM9FkNxEeX8kEIw1n2u%22%7D)
 
 ---
 
