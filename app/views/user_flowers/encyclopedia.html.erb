@@ -5,22 +5,23 @@
     <div class="flower-list">
       <% @encyclopedia_flowers.each do |user_flower| %>
         <div class="flower-card">
-          <%# 花の画像を表示 %>
           <% if user_flower.flower.present? %>
-            <%= image_tag user_flower.flower.bloom_image_path, alt: user_flower.flower.name, class: "flower-image" %>
+            <%= image_tag user_flower.flower.bloom_image_path,
+                          alt: user_flower.flower.name,
+                          class: "flower-image" %>
           <% else %>
-            <%# 花の情報がない場合のプレースホルダー画像 %>
-            <%= image_tag "placeholder_flower.png", alt: "不明な花", class: "flower-image" %>
+            <%= image_tag "placeholder_flower.png",
+                          alt: "不明な花",
+                          class: "flower-image" %>
           <% end %>
 
           <h3 class="flower-name">
-            <%# 花の名前を表示 %>
             <%= user_flower.flower.present? ? user_flower.flower.name : "不明な花" %>
           </h3>
-          <%# 花を咲かせた日付を表示 %>
-          <p class="flower-date">咲かせた日: <%= l user_flower.created_at.to_date, format: :long %></p>
-          <%# 必要であれば、合計記録時間などもここに追加できるよ %>
-          <%# 例: <p>合計記録時間: <%= user_flower.records.sum(:time) / 60 %> 分</p> %>
+
+          <p class="flower-date">
+            咲かせた日: <%= l user_flower.created_at.to_date, format: :long %>
+          </p>
         </div>
       <% end %>
     </div>
