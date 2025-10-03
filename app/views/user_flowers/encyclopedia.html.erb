@@ -5,18 +5,12 @@
     <div class="flower-list">
       <% @encyclopedia_flowers.each do |user_flower| %>
         <div class="flower-card">
-          <% if user_flower.flower.present? %>
-            <%= image_tag user_flower.flower.bloom_image_path,
-                          alt: user_flower.flower.name,
-                          class: "flower-image" %>
-          <% else %>
-            <%= image_tag "placeholder_flower.png",
-                          alt: "不明な花",
-                          class: "flower-image" %>
-          <% end %>
+          <%= image_tag user_flower.flower.bloom_image_path,
+                        alt: user_flower.flower.name,
+                        class: "flower-image" %>
 
           <h3 class="flower-name">
-            <%= user_flower.flower.present? ? user_flower.flower.name : "不明な花" %>
+            <%= user_flower.flower.name %>
           </h3>
 
           <p class="flower-date">
@@ -26,7 +20,9 @@
       <% end %>
     </div>
   <% else %>
-    <p class="no-flowers-message">まだ満開の花がないみたい。たくさん記録して花を咲かせよう！🌱</p>
+    <p class="no-flowers-message">
+      まだ満開の花がないみたい。たくさん記録して花を咲かせよう！🌱
+    </p>
   <% end %>
 
   <%= link_to "トップページへ戻る", root_path, class: "btn-back-to-home" %>
