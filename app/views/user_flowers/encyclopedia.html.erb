@@ -5,7 +5,9 @@
     <div class="flower-list">
       <% @encyclopedia_flowers.each do |user_flower| %>
         <div class="flower-card">
-          <%= image_tag user_flower.flower.bloom_image_path,
+          <% image_filename = File.basename(user_flower.flower.bloom_image_path) %> 
+
+          <%= image_tag image_filename, 
                         alt: user_flower.flower.name,
                         class: "flower-image" %>
 
