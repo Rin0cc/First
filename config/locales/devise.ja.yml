@@ -1,4 +1,7 @@
 ja:
+  date:
+    formats:
+      long: "%Y年%m月%d日" 
   devise:
     passwords:
       new:
