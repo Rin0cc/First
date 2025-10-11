@@ -3,12 +3,12 @@ class Flower < ApplicationRecord
 
   validates :name, presence: true
 
-  # 画像パスを安全に扱うメソッド
   def bloom_image_path
-    path = self[:bloom_image_path] # DBに保存されている値を直接参照
-    return "placeholder_flower.png" if path.blank?
+    path = self[:bloom_image_path]
+    
+    # 💡 修正: パスが空の場合、存在するデフォルト画像（FullBloom1.png）を返す
+    return "FullBloom1.png" if path.blank? 
 
-    # "image/" がついていたら除去して返す
     path.sub(/^image\//, "")
   end
 end
