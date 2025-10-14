@@ -94,8 +94,8 @@ RUNTEQのポモドーロ勉強法を通じて、努力を可視化すること�
 - インフラ：Docker / Render
 
 - 画面遷移図（Figma）: [こちら](https://www.figma.com/design/4kCCVCXhWqxJIdVIifQLZE/%E7%84%A1%E9%A1%8C?node-id=0-1&p=f)
-- ER図（diagrams.net）: [こちら](https://gyazo.com/6d0c67ccb73027efa4cfde91ad4b90f)
-
+- ER図（diagrams.net）: [こちら](https://app.diagrams.net/#G19dhmxyBBigMYUA72SGwaE7c-xSvxEKhQ#%7B%22pageId%22%3A%225xM9FkNxEeX8kEIw1n2u%22%7D)
+[![Image from Gyazo](https://i.gyazo.com/6d0c83fccb73027efa4cfde91ad4b90f.png)](https://gyazo.com/6d0c83fccb73027efa4cfde91ad4b90f)
 ---
 
 ## ■ 使用ライブラリ
