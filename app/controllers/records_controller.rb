@@ -175,12 +175,12 @@ end
     if @user_flower.nil?
       # `Flower`モデルにレコードが一つもない場合、自動的にデフォルトのお花を作成します。
       # すでにある場合は最初のお花を取得します。
-      default_flower = Flower.first_or_create(name: "ひまわり")
+      default_flower = Flower.first_or_create(name: "コスモス")
 
       # 既存の花も自動作成した花も取得できなかった場合はエラー
       if default_flower.nil?
         # このエラーは通常発生しないはずですが、念のため残しておきます。
-        flash[:alert] = "花のデータが見つかりません。管理者に連絡してください。"
+        flash[:alert] = "花のデータが見つかりません。"
         redirect_to root_path and return
       end
 
@@ -222,7 +222,7 @@ end
       new_flower = current_user.user_flowers.create(flower: Flower.first, status: :waiting)
       new_flower_id_for_js = new_flower.id if new_flower.persisted?
 
-      [ "🌸 花が咲きました！", [ "FullBloom1.png", "FullBloom2.png" ].sample.to_s, new_flower_id_for_js ]
+      [ "🌸 花が咲きました！", [ "FullBloom1.png", "FullBloom2.png","FullBloom3.png","FullBloom4.png","FullBloom5.png"].sample.to_s, new_flower_id_for_js ]
     else
       [ "✨ 記録ありがとう！花は成長中だよ！", "Thanks.png", new_flower_id_for_js ]
     end
