@@ -78,7 +78,7 @@ class RecordsController < ApplicationController
     # Chart.js 用のデータ準備 (日ごとの合計記録時間)
     user_records = current_user.records
                                .where.not(time: nil)
-                               .where('created_at >= ?', seven_days_ago.beginning_of_day)
+                               .where("created_at >= ?", seven_days_ago.beginning_of_day)
 
     daily_total_times = user_records.group("DATE(created_at)").sum(:time)
 
