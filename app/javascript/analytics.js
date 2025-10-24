@@ -11,8 +11,11 @@ function initializeAnalytics() {
   // Chart.js - 日別記録時間グラフの描画
   const dailyTimeChartCanvas = document.getElementById('dailyTimeChart');
   if (dailyTimeChartCanvas && typeof window.chartData !== 'undefined' && typeof Chart !== 'undefined') {
-    const labels = window.chartData.map(data => data.date);
-    const dataValues = window.chartData.map(data => data.totalDurationMinutes);
+    
+    const recentChartData = window.chartData.slice(-7); 
+
+    const labels = recentChartData.map(data => data.date);
+    const dataValues = recentChartData.map(data => data.totalDurationMinutes);
 
     // 既存のChartインスタンスがあれば破棄する（再初期化のため）
     if (dailyTimeChartCanvas.chart) { 
@@ -26,8 +29,8 @@ function initializeAnalytics() {
         datasets: [{
           label: '記録時間 (分)',
           data: dataValues,
-          backgroundColor: 'rgb(216, 241, 255)', // ユーザーちゃんが設定した色
-          borderColor: 'rgb(189, 224, 174)',     // ユーザーちゃんが設定した色
+          backgroundColor: 'rgb(216, 241, 255)',
+          borderColor: 'rgb(189, 224, 174)',
           borderWidth: 1
         }]
       },
@@ -65,11 +68,11 @@ function initializeAnalytics() {
 
     const newCalendar = new Calendar(calendarEl, {
       plugins: [ dayGridPlugin, timeGridPlugin, interactionPlugin ],
-      initialView: 'dayGridMonth',
+      initialView: 'dayGridMonth', 
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        right: 'dayGridMonth,timeGridWeek,timeGridDay' 
       },
       buttonText: {
         today: '今日',
@@ -82,8 +85,7 @@ function initializeAnalytics() {
       eventClick: function(info) {
         alert('イベント: ' + info.event.title);
       },
-      editable: false, // イベントの編集は無効化
-      // eventDrop と eventResize は不要なので削除しました
+      editable: false,
     }); 
     newCalendar.render();
     // 新しいCalendarインスタンスをcalendar要素に保存する
@@ -91,20 +93,17 @@ function initializeAnalytics() {
   }
 }
 
-// DOMContentLoadedはTurbo Driveでは再発火しないのでコメントアウト
-// document.addEventListener('DOMContentLoaded', initializeAnalytics); 
-document.addEventListener('turbo:load', initializeAnalytics); // Turbo Driveのページ遷移時に初期化を実行
+document.addEventListener('turbo:load', initializeAnalytics); 
 
-// Turbo Driveがページをキャッシュする前に、ChartやCalendarのインスタンスを破棄する
 document.addEventListener('turbo:before-cache', () => {
   const dailyTimeChartCanvas = document.getElementById('dailyTimeChart');
   if (dailyTimeChartCanvas && dailyTimeChartCanvas.chart) {
     dailyTimeChartCanvas.chart.destroy();
-    dailyTimeChartCanvas.chart = null; // 参照をクリア
+    dailyTimeChartCanvas.chart = null;
   }
   const calendarEl = document.getElementById('calendar');
   if (calendarEl && calendarEl.calendar) {
     calendarEl.calendar.destroy();
-    calendarEl.calendar = null; // 参照をクリア
+    calendarEl.calendar = null;
   }
 });

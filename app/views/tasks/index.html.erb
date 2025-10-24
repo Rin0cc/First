@@ -37,9 +37,7 @@
     <% end %>
   </ul>
 <% else %>
-  <p>まだ完了したToDoはないみたい🍀</p>
+  <p>まだ完了したToDoはないよ🍀</p>
 <% end %>
 <hr>
-<%= link_to"📚記録へ戻る", records_path, class: "btn-back-to-records" %>
-<%= link_to "✔️ToDoリストを見る", tasks_path, class: "btn btn-info" %>
-
+<%= link_to "マイページへ戻る", user_path(current_user) %>
