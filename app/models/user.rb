@@ -11,16 +11,18 @@ class User < ApplicationRecord
   after_create :create_initial_flower
 
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0, 20]
-      user.username = "名無しフラワーさん🌼"
-    end.tap do |user|
-      unless user.persisted?
-        Rails.logger.error "💥 User save failed: #{user.errors.full_messages.join(', ')}"
-      end
+  where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+    user.email = auth.info.email
+    user.password = Devise.friendly_token[0, 20]
+    # 🌼 usernameの重複を防ぐため、ランダムな文字列を追加
+    user.username = "名無しフラワーさん🌼#{SecureRandom.hex(3)}"
+  end.tap do |user|
+    unless user.persisted?
+      Rails.logger.error "💥 User save failed: #{user.errors.full_messages.join(', ')}"
     end
   end
+end
+
 
   def first_record_date
     records.order(created_at: :asc).first&.created_at&.in_time_zone("Asia/Tokyo")&.to_date
