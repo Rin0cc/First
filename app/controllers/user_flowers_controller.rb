@@ -1,5 +1,5 @@
 class UserFlowersController < ApplicationController
-  before_action :authenticate_user! 
+  before_action :authenticate_user!
 
   def encyclopedia
     # 💡 修正: where(status: :full_bloom) を削除

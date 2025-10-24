@@ -222,7 +222,7 @@ end
       new_flower = current_user.user_flowers.create(flower: Flower.first, status: :waiting)
       new_flower_id_for_js = new_flower.id if new_flower.persisted?
 
-      [ "🌸 花が咲きました！", [ "FullBloom1.png", "FullBloom2.png","FullBloom3.png","FullBloom4.png","FullBloom5.png"].sample.to_s, new_flower_id_for_js ]
+      [ "🌸 花が咲きました！", [ "FullBloom1.png", "FullBloom2.png", "FullBloom3.png", "FullBloom4.png", "FullBloom5.png" ].sample.to_s, new_flower_id_for_js ]
     else
       [ "✨ 記録ありがとう！花は成長中だよ！", "Thanks.png", new_flower_id_for_js ]
     end
