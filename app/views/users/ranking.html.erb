@@ -1,15 +1,15 @@
 <div class="ranking-container">
   <h1>ユーザーランキング🏆</h1>
-  <p class="ranking-description">合計記録時間（経過時間）のランキングだよ！</p>
+  <p class="ranking-description">合計記録時間（経過時間）のランキングだよ🌷</p>
 
   <ol class="ranking-list">
-    <% @ranked_users.each.with_index(1) do |user, index| %>
+    <% @ranked_users.first(10).each.with_index(1) do |user, index| %>
       <li class="ranking-item">
         <span class="rank-number rank-<%= index %>"><%= index %>位:</span>
         <span class="username">
           <%= user.username.presence || "名無しフラワーさん🌼" %>
         </span>
-        <span class="duration-total">
+        &nbsp;&nbsp;&nbsp;  <span class="duration-total">
           合計記録時間: <span class="duration-value"><%= user.total_record_duration_hours %></span>時間
         </span>
       </li>

@@ -1001,14 +1001,13 @@ login-form input[type="text"]:focus {
 .logout-btn:hover {
   background-color: #baeca6; 
 }
-
 .ranking-container {
   max-width: 600px;
-  margin: 40px auto; // 中央配置
+  margin: 40px auto;
   padding: 20px;
-  background: #fdfdfd; // わずかにクリームがかった背景
-  border-radius: 15px; // 角を丸く
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); // 浮遊感のある影
+  background: #fdfdfd;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
   
   h1 {
@@ -1025,73 +1024,121 @@ login-form input[type="text"]:focus {
   }
 }
 .ranking-list {
-  list-style: none; // デフォルトの数字を消す
+  list-style: none;
   padding: 0;
 }
 
 .ranking-item {
-  display: flex; // 横並びにする
-  justify-content: space-between; // 要素を左右に広げる
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 15px 10px;
-  border-bottom: 1px solid #eee; // 区切り線
-  transition: background-color 0.2s; // ホバーで色が変わるアニメーション
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
   
   &:last-child {
-    border-bottom: none; // 最後の要素の線は消す
+    border-bottom: none;
   }
   
   &:hover {
-    background-color: #f5f5f5; // わずかなホバー効果
+    background-color: #f5f5f5;
   }
 }
-
-// 順位番号の強調
+------------------------------------
 .rank-number {
-  font-weight: bold;
+  font-weight: 700; 
   font-size: 1.1em;
-  width: 50px; // 順位の幅を固定して整列させる
-  flex-shrink: 0; // 縮まない
+  flex-shrink: 0;
+  margin-right: 10px;
 }
-
-// ユーザー名の強調
 .username {
-  flex-grow: 1; // 空間を占有
+  flex-grow: 1; 
   margin-left: 10px;
+  margin-right: 20px; 
   color: #333;
+  font-weight: 400; 
 }
 
-// 合計時間の強調
-.duration-total {
-  font-size: 0.9em;
-  color: #555;
-  .duration-value {
-    font-weight: bold;
-    color: #FF9800; // オレンジ色で数値を強調
-  }
-}
-// 1位の特別装飾
-.rank-1 {
-  color: gold; // 金色
-  font-size: 5em;
+// ------------------------------------
+// 🏅 Top 3 の丸枠設定
+// ------------------------------------
+
+/* 1, 2, 3位にのみ丸枠の基本スタイルを適用 */
+.ranking-item:nth-child(1) .rank-number,
+.ranking-item:nth-child(2) .rank-number,
+.ranking-item:nth-child(3) .rank-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; 
+  height: 30px;
+  border-radius: 50%;
+  // 4位以下のためにリセットされた width を上書き
+  width: 30px !important; 
+  height: 30px !important;
 }
 
+/* 🏆 1位の丸枠と太さ */
 .ranking-item:nth-child(1) {
-  background-color: #fffbe6; // わずかに明るい背景
+  background-color: #fffbe6;
   border: 2px solid gold;
   border-radius: 8px;
   margin: 5px 0;
   box-shadow: 0 2px 5px rgba(255, 193, 7, 0.3);
 }
-
-// 2位の装飾
-.rank-2 {
-  color: silver;
-  font-size: 3em;
+.ranking-item:nth-child(1) .rank-number {
+  font-weight: 900;
+  font-size: 1.25em;
+  border: 3px solid gold; 
+  color: gold; 
+  background-color: #fffac2;
+}
+.ranking-item:nth-child(1) .username {
+  color: #c99300; 
+  font-weight: 700; 
 }
 
-// 3位の装飾
-.rank-3 {
-  color: #cd7f32; // 銅色
-  font-size: 2em;
+
+/* 🥈 2位の丸枠と太さ */
+.ranking-item:nth-child(2) {
+  background-color: #f7f7f7;
+  border-left: 5px solid silver;
+}
+.ranking-item:nth-child(2) .rank-number {
+  font-weight: 800;
+  font-size: 1.2em;
+  border: 2px solid silver;
+  color: silver;
+  background-color: #f0f0f0; 
+}
+.ranking-item:nth-child(2) .username {
+  font-weight: 600; 
+}
+
+
+/* 🥉 3位の丸枠と太さ */
+.ranking-item:nth-child(3) {
+  background-color: #fafafa;
+  border-left: 5px solid #cd7f32;
+}
+.ranking-item:nth-child(3) .rank-number {
+  font-weight: 700;
+  font-size: 1.15em;
+  border: 2px solid #cd7f32;
+  color: #cd7f32;
+  background-color: #f9f4f1;
+}
+.ranking-item:nth-child(3) .username {
+  font-weight: 500;
+}
+
+
+/* 4位以下の順位番号 */
+.ranking-item:nth-child(n+4) .rank-number {
+  border: none;
+  background: none;
+  color: #333;
+  width: auto; 
+  height: auto;
+  font-size: 1.1em;
 }
