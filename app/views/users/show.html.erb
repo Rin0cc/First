@@ -10,12 +10,12 @@
       <li class="menu-item"><%= link_to "🏆ランキング", ranking_users_path %></li> 
       <li class="menu-item"><%= link_to "💐図鑑(工事中)", root_path %></li>
       <li class="menu-item">
-        <% current_user_total_hours = current_user.total_record_duration_hours %>
-        <%= link_to "✨Xで記録をシェアする", 
-                "https://twitter.com/intent/tweet?text=#{CGI.escape("ぶるーみんぐれこーどで合計#{current_user_total_hours}時間記録したよ！")}&url=#{CGI.escape(root_url)}", 
-                target: "_blank", 
-                rel: "nofollow noopener"
-                %>
+        <% if current_user.present? %>
+  <% current_user_total_hours = current_user.total_record_duration_hours %>
+  <%= link_to "✨Xで記録をシェアする",
+      "https://twitter.com/intent/tweet?text=#{CGI.escape("ぶるーみんぐれこーどで合計#{current_user_total_hours}時間記録したよ！")}&url=#{CGI.escape(root_url)}",
+      target: "_blank" %>
+      <% end %>
       </li>
     </ul>
     
