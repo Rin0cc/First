@@ -47,4 +47,11 @@ end
       user_flowers.create(flower: default_flower, status: :waiting)
     end
   end
+  def self.guest
+  find_or_create_by!(email: 'guest@example.com') do |user|
+    user.password = SecureRandom.urlsafe_base64
+    user.name = "ゲスト"
+  end
+end
+
 end
