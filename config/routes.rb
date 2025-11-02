@@ -5,20 +5,10 @@ Rails.application.routes.draw do
 
   # devise関連
   devise_for :users, controllers: {
-    sessions: "users/sessions",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
-
-  # ゲストログイン
-  devise_scope :user do
-    get  "users/guest_sign_in", to: "users/sessions#guest_sign_in"
-    post "users/guest_sign_in", to: "users/sessions#guest_sign_in"
-  end
-
-  # サインアップリダイレクト
   get "/sign_up", to: redirect("/users/sign_up")
 
-  # ルート
   root "top#index"
 
   resources :users do
@@ -27,19 +17,21 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :records, only: [:new, :create, :update, :destroy, :index, :show] do
+  # records_controller のルーティング
+  resources :records, only: [ :new, :create, :update, :destroy, :index, :show ] do
     collection do
       get "analytics"
     end
   end
 
-  resources :tasks, only: [:index] do
+  resources :tasks, only: [ :index ] do # `tasks#index`でToDoリスト一覧を表示するよ
     member do
+      # 特定のタスクの完了状態を切り替えるアクション
       patch :toggle_completion
     end
   end
 
-  resources :user_flowers, only: [:index] do
+  resources :user_flowers, only: [ :index ] do
     collection do
       get :encyclopedia
     end

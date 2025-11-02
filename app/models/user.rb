@@ -10,7 +10,7 @@ class User < ApplicationRecord
 
   after_create :create_initial_flower
 
- def self.from_omniauth(auth)
+  def self.from_omniauth(auth)
   where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
     user.email = auth.info.email
     user.password = Devise.friendly_token[0, 20]
@@ -22,6 +22,7 @@ class User < ApplicationRecord
     end
   end
 end
+
 
   def first_record_date
     records.order(created_at: :asc).first&.created_at&.in_time_zone("Asia/Tokyo")&.to_date
@@ -46,11 +47,4 @@ end
       user_flowers.create(flower: default_flower, status: :waiting)
     end
   end
-
-  def self.guest
-  find_or_create_by!(email: "guest@example.com") do |user|
-    user.password = SecureRandom.urlsafe_base64
-    user.username = "ゲストユーザー"
-  end
-end
 end
