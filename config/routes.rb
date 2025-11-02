@@ -5,13 +5,16 @@ Rails.application.routes.draw do
 
   # devise関連
   devise_for :users, controllers: {
+    sessions: "users/sessions",
     omniauth_callbacks: "users/omniauth_callbacks"
   }
-  get "/sign_up", to: redirect("/users/sign_up")
+
   devise_scope :user do
-    get "users/guest_sign_in", to: "users#guest_sign_in"
-    post "users/guest_sign_in", to: "users#guest_sign_in"
-end
+    get  "users/guest_sign_in", to: "users/sessions#guest_sign_in"
+    post "users/guest_sign_in", to: "users/sessions#guest_sign_in"
+  end
+
+  get "/sign_up", to: redirect("/users/sign_up")
 
   root "top#index"
 
@@ -21,27 +24,24 @@ end
     end
   end
 
-  # records_controller のルーティング
-  resources :records, only: [ :new, :create, :update, :destroy, :index, :show ] do
+  resources :records, only: [:new, :create, :update, :destroy, :index, :show] do
     collection do
       get "analytics"
     end
   end
 
-  resources :tasks, only: [ :index ] do # `tasks#index`でToDoリスト一覧を表示するよ
+  resources :tasks, only: [:index] do
     member do
-      # 特定のタスクの完了状態を切り替えるアクション
       patch :toggle_completion
     end
   end
 
-  resources :user_flowers, only: [ :index ] do
+  resources :user_flowers, only: [:index] do
     collection do
       get :encyclopedia
     end
   end
 
-  # 開発環境専用のメール確認
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   get "up" => "rails/health#show", as: :rails_health_check
