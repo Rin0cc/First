@@ -9,14 +9,16 @@ Rails.application.routes.draw do
     omniauth_callbacks: "users/omniauth_callbacks"
   }
 
+  # ゲストログイン
   devise_scope :user do
-devise_scope :user do
-  get  "users/guest_sign_in", to: "users/sessions#guest_sign_in"
-  post "users/guest_sign_in", to: "users/sessions#guest_sign_in"
+    get  "users/guest_sign_in", to: "users/sessions#guest_sign_in"
+    post "users/guest_sign_in", to: "users/sessions#guest_sign_in"
   end
 
+  # サインアップリダイレクト
   get "/sign_up", to: redirect("/users/sign_up")
 
+  # ルート
   root "top#index"
 
   resources :users do
@@ -43,6 +45,7 @@ devise_scope :user do
     end
   end
 
+  # 開発環境専用のメール確認
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   get "up" => "rails/health#show", as: :rails_health_check
